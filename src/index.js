@@ -179,7 +179,7 @@ onSnapshot(q, (snapshot) => {
       userData = score.filter(s=> {
         return s.uid === currentUser.uid
       })[0]
-      bestScore.innerHTML = 'Best score : ' + userData.score
+      bestScore.innerHTML = 'Best : ' + userData.score
     }
     
     let textNode = ''

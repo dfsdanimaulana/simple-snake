@@ -199,17 +199,18 @@ nav span {
 
 #point {
   position: absolute;
-  top: 10px;
+  color:#fff;
   left: 10px;
   font-weight: bold;
+  bottom: -25px;
 }
 
 #best-score {
   position: absolute;
   font-weight: bold;
   color:#fff;
-  left: 20;
-  bottom: -20px;
+  right: 10px;
+  bottom: -25px;
 }
 .snake {
   background-color: #3a9cf0a5;
