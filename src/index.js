@@ -19,7 +19,8 @@ import {
   orderBy,
   where,
   doc,
-  updateDoc
+  updateDoc,
+  limit
 } from 'firebase/firestore'
 
 import {
@@ -43,20 +44,27 @@ const gamePoint = document.getElementById('point-value')
 const loginBox = document.getElementById('login')
 const signupBox = document.getElementById('signup')
 const authLink = document.getElementById('auth-link')
+const authLinkSide = document.getElementById('auth-link-side')
 const settingLink = document.getElementById('setting')
+const settingLinkSide = document.getElementById('setting-side')
 const scoreboardLink = document.getElementById('scoreboard')
-const loginLink = document.getElementById('login-link')
 const logoutLink = document.getElementById('logout-link')
+const logoutLinkSide = document.getElementById('logout-link-side')
+const loginLink = document.getElementById('login-link')
 const signupLink = document.getElementById('signup-link')
 const boost = document.getElementById('boost')
 const point = document.getElementById('point-value')
+const scoreboardBox = document.querySelector('#scoreboard-box table')
 const signupClose = document.querySelector('#signup-form .close')
 const loginClose = document.querySelector('#login-form .close')
 const navButton = document.querySelector('.nav-button')
 const navUl = document.querySelector('.nav-ul')
+const sideUl = document.querySelector('.side-ul')
 const loginForm = document.querySelector('#login-form')
 const signupForm = document.querySelector('#signup-form')
 const bestScore = document.querySelector('#best-score')
+const sidebar = document.querySelector('sidebar')
+const nav = document.querySelector('nav')
 
 /**
  * Game logic
@@ -88,7 +96,7 @@ function main(currentTime) {
       } else {
         Swal.fire({
           title: 'Game over!',
-          icon: 'info',
+          icon: 'error',
           text:'Create account to save your game data',
           showCancelButton: true,
           confirmButtonColor: '#3085d6',
@@ -158,9 +166,11 @@ function goHome(){
  
 const colRef = collection(db, 'scores')
 
+const q = query(colRef, orderBy('score','desc'), limit(10))
 // realtime Listener firestore database
 
-onSnapshot(colRef, (snapshot) => {
+let tableText = ''
+onSnapshot(q, (snapshot) => {
     let score = []
     snapshot.docs.forEach((doc) => {
         score.push({ ...doc.data(), id: doc.id })
@@ -171,6 +181,39 @@ onSnapshot(colRef, (snapshot) => {
       })[0]
       bestScore.innerHTML = 'Best score : ' + userData.score
     }
+    
+    let textNode = ''
+    
+    if(score.length > 0){
+      score.forEach((s, i)=>{
+        textNode += 
+        `<tr>
+          <td class="col">${i+1}</td>
+          <td>${s.username}</td>
+          <td class="col-score">${s.score}</td>
+        </tr>`
+      })
+    }
+    
+    // scoreboard sidebar
+    if(sidebar){
+      scoreboardBox.innerHTML = 
+      `<tr>
+        <th>No</th>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>` + textNode
+    }
+    
+    // scoreboard nav
+    
+      tableText = 
+      `<tr>
+        <th>No</th>
+        <th>Name</th>
+        <th>Score</th>
+      </tr>` + textNode
+    
 })
 
 function updateUserScore() {
@@ -204,15 +247,25 @@ onAuthStateChanged(auth, (user) => {
     sessionStorage.setItem('currentUser', JSON.stringify(user))
     currentUser = user
     // create user displayname list
-    const nameList = document.createElement('li')
-    nameList.classList.add('dislay-name')
-    nameList.innerHTML = `<h3>${user.displayName}</h3><hr/>`
-    navUl.insertBefore(nameList, settingLink)
+    const nameListNav = document.createElement('li')
+    nameListNav.classList.add('display-name')
+    nameListNav.innerHTML = `<h3>${user.displayName}</h3><hr/>`
+    navUl.insertBefore(nameListNav, settingLink)
+    
+    const nameListSide = document.createElement('li')
+    nameListSide.classList.add('display-name')
+    nameListSide.innerHTML = `<h3>${user.displayName}</h3><hr/>`
+    sideUl.insertBefore(nameListSide, settingLinkSide)
+    
     
     authLink.style.display = 'none'
+    authLinkSide.style.display = 'none'
+    
     settingLink.style.display = 'block'
+    settingLinkSide.style.display = 'block'
+    
     logoutLink.style.display = 'block'
-    scoreboardLink.style.display = 'block'
+    logoutLinkSide.style.display = 'block'
     
   } else {
     
@@ -222,9 +275,13 @@ onAuthStateChanged(auth, (user) => {
     }
     
     authLink.style.display = 'block'
+    authLinkSide.style.display = 'block'
+    
     settingLink.style.display = 'none'
+    settingLinkSide.style.display = 'none'
+    
     logoutLink.style.display = 'none'
-    scoreboardLink.style.display = 'none'
+    logoutLinkSide.style.display = 'none'
   }
 })
 
@@ -294,28 +351,34 @@ loginForm.addEventListener('submit', (e) => {
         })
 })
 
+function handleLogout () {
+    Swal.fire({
+      title: 'Are you sure?',
+      icon: 'question',
+      showCancelButton: true,
+      confirmButtonColor: '#3085d6',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Yes',
+      cancelButtonText: 'No'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        signOut(auth).
+          then(()=> {
+            goHome()
+          })
+          .catch((err)=> {
+            console.log(err.message)
+          })
+      }
+    })
+}
+
 // handle logout user
 logoutLink.addEventListener('click', ()=> {
-      Swal.fire({
-        title: 'Are you sure?',
-        icon: 'question',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No'
-      }).then((result) => {
-        if (result.isConfirmed) {
-          signOut(auth).
-            then(()=> {
-              goHome()
-            })
-            .catch((err)=> {
-              console.log(err.message)
-            })
-        }
-      })
-  
+  handleLogout()
+})
+logoutLinkSide.addEventListener('click', ()=> {
+  handleLogout()
 })
 
 // function to remove previous auth error message
@@ -335,7 +398,14 @@ function removeErrorMessage() {
 
 /**
  * DOM interaction
- */
+*/
+scoreboard.addEventListener('click',()=>{
+  Swal.fire({
+    title: '<strong>Scoreboard</strong>',
+    html:`<table id="popup-table">${tableText}</table>`,
+    showCloseButton: true
+  })
+})
  
 // open nav menu
 navButton.addEventListener('click',()=>{
@@ -363,6 +433,9 @@ window.addEventListener('click',(e)=>{
 
 // show signup form from menu
 authLink.addEventListener('click', ()=> {
+  openForm('signup')
+})
+authLinkSide.addEventListener('click', ()=> {
   openForm('signup')
 })
 

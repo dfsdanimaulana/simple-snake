@@ -22,11 +22,48 @@ a {
   text-decoration: none;
 }
 
+ul {
+  list-style: none;
+}
+
 nav {
   background-color: var(--nav-blue);
   display: flex;
   align-items: center;
   color:#fff;
+}
+
+sidebar {
+  color: #fff;
+  display: none;
+  margin-left: 20px;
+  max-height: 100vh;
+  overflow: auto;
+}
+
+sidebar h3 {
+  margin-top: 20px;
+}
+.side-ul li {
+  margin-bottom: 20px;
+  margin-top: 20px;
+}
+table, th, td {
+  border: 1px solid grey;
+  border-collapse: collapse;
+}
+
+sidebar table {
+  min-width: 200px;
+  margin-bottom: 20px;
+}
+
+#popup-table {
+  width: 100%;
+}
+
+.col, .col-score{
+  text-align: center;
 }
 
 .btn {
@@ -53,7 +90,6 @@ nav h1 {
 }
 
 .nav-ul {
-  list-style: none;
   display: block;
   position: fixed;
   background-color: var(--nav-dark);
@@ -211,12 +247,28 @@ nav span {
     display: flex;
     justify-content: center;
   }
+  sidebar {
+    display: block;
+  }
   
-  #keyboard {
+  #board {
+    height: 100vh;
+    width: 100vh;
+  }
+  #keyboard, nav {
     display: none;
   }
   
   #point {
     color: #fff;
+    position: fixed;
+    top: 10px;
+    left: 10px;
+  }
+  
+  #best-score {
+    position: fixed;
+    top: 30px;
+    left: 10px;
   }
 }
