@@ -1,3 +1,27 @@
+// firebase import
+import { auth, db } from './firebase.js'
+
+import {
+  createUserWithEmailAndPassword, 
+  signInWithEmailAndPassword,
+  updateProfile,
+  onAuthStateChanged,
+  signOut
+} from 'firebase/auth'
+
+import {
+  collection,
+  addDoc,
+  getDoc,
+  onSnapshot,
+  serverTimestamp,
+  query,
+  orderBy,
+  where,
+  doc,
+  updateDoc
+} from 'firebase/firestore'
+
 import {
   update as updateSnake,
   draw as drawSnake, 
@@ -14,37 +38,51 @@ import {
 import { outSideGrid } from './game/grid.js'
 import { getSnakeSpeed, boostSpeed } from './game/input.js'
 
-// firebase import
-import { auth } from './firebase.js'
-import {
-  createUserWithEmailAndPassword, 
-  signInWithEmailAndPassword,
-  updateProfile,
-  onAuthStateChanged,
-  signOut
-} from 'firebase/auth'
-
-// game loop
-let lastRenderTime = 0
-let gameOver = false
 const gameBoard = document.getElementById('game-board')
 const gamePoint = document.getElementById('point-value')
-
-// handle boost
+const loginBox = document.getElementById('login')
+const signupBox = document.getElementById('signup')
+const authLink = document.getElementById('auth-link')
+const settingLink = document.getElementById('setting')
+const scoreboardLink = document.getElementById('scoreboard')
+const loginLink = document.getElementById('login-link')
+const logoutLink = document.getElementById('logout-link')
+const signupLink = document.getElementById('signup-link')
 const boost = document.getElementById('boost')
+const point = document.getElementById('point-value')
+const signupClose = document.querySelector('#signup-form .close')
+const loginClose = document.querySelector('#login-form .close')
+const navButton = document.querySelector('.nav-button')
+const navUl = document.querySelector('.nav-ul')
+const loginForm = document.querySelector('#login-form')
+const signupForm = document.querySelector('#signup-form')
+const bestScore = document.querySelector('#best-score')
 
-boost.addEventListener('click', ()=>{
-  boostSpeed()
-})
+/**
+ * Game logic
+ */
+ 
+ // game loop
+let lastRenderTime = 0
+let gameOver = false
+let currentUser = null
+let userData = null
 
+window.requestAnimationFrame(main)
+
+// main Function
 function main(currentTime) {
   if(gameOver){
+      
+      //update score in user firestore
+      updateUserScore()
+      
       Swal.fire(
         'Game Over!',
         "Don't give up and try again 😊",
         'error'
       ).then(()=>{
-        window.location = '/simple-snake'
+        goHome()
       })
       return
   }
@@ -57,178 +95,91 @@ function main(currentTime) {
   draw()
 }
 
-window.requestAnimationFrame(main)
-
+// update snake status
 function update() {
-  
   updateSnake()
   gamePoint.innerHTML = updatePoint()
   updateFood()
   checkDeath()
 }
 
+// draw snake to dom
 function draw() {
   gameBoard.innerHTML = ''
   drawSnake(gameBoard)
   drawFood(gameBoard)
 }
 
+// cek if snake hit the wall or its own body
 function checkDeath() {
   gameOver = outSideGrid(getSnakeHead()) || snakeIntersection()
 }
 
-// select skin depends on the level
-
-// toggle nav menu
-const navButton = document.querySelector('.nav-button')
-const navUl = document.querySelector('.nav-ul')
-
-navButton.addEventListener('click',()=>{
-  navUl.classList.add('toggle-nav')
+// handle boost
+boost.addEventListener('click', ()=>{
+  boostSpeed()
 })
 
-// outside click
-window.addEventListener('click',(e)=>{
-  let clickedElement = e.target
-  do {
-    if(clickedElement == navButton){
-      return
-    }
-    if(clickedElement == navUl){
-      return
-    }
-    clickedElement = clickedElement.parentNode
-  } while (clickedElement)
-  navUl.classList.remove('toggle-nav')
-})
-
-// auth form controll
-
-const loginForm = document.querySelector('#login-form')
-const signupForm = document.querySelector('#signup-form')
-
-function removeErrorMessage() {
-    // remove previous error message
-    const errorMessage = document.querySelector('.error')
-    if(errorMessage){
-      errorMessage.remove()
-    }
+// redirect to main route
+function goHome(){
+  window.location = '/simple-snake'
 }
 
-loginForm.addEventListener('submit', (e) => {
-  e.preventDefault()
-  
-  removeErrorMessage()
-  
-  const email = loginForm.email.value
-  const password = loginForm.password.value
-  
-  signInWithEmailAndPassword(auth, email, password)
-      .then((cred) => {
-            console.log('login success', cred.user)
-            loginForm.reset()
-        })
-        .catch((err) => {
-            const elementBefore = loginForm.querySelector('#login-form p')
-            const errorText = document.createElement('p')
-            errorText.innerHTML = err.message
-            errorText.classList.add('error')
-            loginForm.insertBefore(errorText, elementBefore)
-        })
-})
 
-signupForm.addEventListener('submit', (e) => {
-  e.preventDefault()
-  
-  removeErrorMessage()
-  
-  const displayName = signupForm.username.value
-  const email = signupForm.email.value
-  const password = signupForm.password.value
+/**
+ * end game logic
+*/
+
+
+/**
+ * score logic
+*/
  
-  createUserWithEmailAndPassword(auth, email, password)
-        .then((cred) => {
-            // set displayName
-            updateProfile(auth.currentUser, { displayName })
-                .then(()=>{
-                  signupForm.reset()
-                })
-            // save user data to locale storage
-        })
-        .catch((err) => {
-            const elementBefore = signupForm.querySelector('#signup-form p')
-            const errorText = document.createElement('p')
-            errorText.innerHTML = err.message
-            errorText.classList.add('error')
-            signupForm.insertBefore(errorText, elementBefore)
-            
-        })
-})
+const colRef = collection(db, 'scores')
 
-// toggle login and signup view
-const loginBox = document.getElementById('login')
-const signupBox = document.getElementById('signup')
-const authLink = document.getElementById('auth-link')
-const settingLink = document.getElementById('setting')
-const scoreboardLink = document.getElementById('scoreboard')
-const loginLink = document.getElementById('login-link')
-const logoutLink = document.getElementById('logout-link')
-const signupLink = document.getElementById('signup-link')
-const signupClose = document.querySelector('#signup-form .close')
-const loginClose = document.querySelector('#login-form .close')
+// realtime Listener firestore database
 
-// show signup form from menu
-authLink.addEventListener('click', ()=> {
-  signupBox.style.display = 'grid'
-  navUl.classList.remove('toggle-nav')
-})
-
-// close signup form
-signupClose.addEventListener('click', ()=> {
-  removeErrorMessage()
-  signupForm.reset()
-  signupBox.style.display = 'none'
-})
-
-// show login form from signup form
-loginLink.addEventListener('click', ()=> {
-  removeErrorMessage()
-  signupForm.reset()
-  signupBox.style.display = 'none'
-  loginBox.style.display = 'grid'
-})
-
-// close login form
-loginClose.addEventListener('click', ()=> {
-  loginForm.reset()
-  removeErrorMessage()
-  loginBox.style.display = 'none'
-})
-
-// show signup form from login form
-signupLink.addEventListener('click', ()=> {
-  removeErrorMessage()
-  loginForm.reset()
-  loginBox.style.display = 'none'
-  signupBox.style.display = 'grid'
-})
-
-// handle logout
-logoutLink.addEventListener('click', ()=> {
-  signOut(auth).
-    then(()=> {
-      console.log('logout success')
+onSnapshot(colRef, (snapshot) => {
+    let score = []
+    snapshot.docs.forEach((doc) => {
+        score.push({ ...doc.data(), id: doc.id })
     })
-    .catch((err)=> {
-      console.log(err.message)
-    })
+    if(currentUser){
+      userData = score.filter(s=> {
+        return s.uid === currentUser.uid
+      })[0]
+      bestScore.innerHTML = 'Best score : ' + userData.score
+    }
 })
 
+function updateUserScore() {
+  if(currentUser && userData){
+    if(userData.score > updatePoint()) return
+      const docRef = doc(db, 'scores', userData.id)
+      updateDoc(docRef, {
+          score :updatePoint()
+      }).then((res) => {
+          console.log(res)
+      }).catch((err)=>{
+        console.log(err.message)
+      })
+      
+  }
+}
+
+/**
+ * end score logic
+ */
+ 
+/**
+ * Handle auth user
+*/
 
 
 // cek if user is logged in
 onAuthStateChanged(auth, (user) => {
   if(user) {
+    currentUser = user
     // create user displayname list
     const nameList = document.createElement('li')
     nameList.classList.add('dislay-name')
@@ -253,3 +204,202 @@ onAuthStateChanged(auth, (user) => {
     scoreboardLink.style.display = 'none'
   }
 })
+
+// handle signup user
+signupForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  
+  removeErrorMessage()
+  
+  const displayName = signupForm.username.value
+  const email = signupForm.email.value
+  const password = signupForm.password.value
+ 
+  createUserWithEmailAndPassword(auth, email, password)
+        .then((cred) => {
+            const user = cred.user
+            // set displayName
+            updateProfile(auth.currentUser, { displayName })
+                .then(()=>{
+                  signupForm.reset()
+                  
+                  // create score data
+                  addDoc(colRef, {
+                    uid: user.uid,
+                    username: user.displayName,
+                    createdAt: serverTimestamp(),
+                    score: 0
+                  })
+                  .then((res)=>{
+                    console.log(res)
+                  })
+                  .catch((err)=>{
+                    console.log(err.message)
+                  })
+                })
+           goHome()
+        })
+        .catch((err) => {
+            const elementBefore = signupForm.querySelector('#signup-form p')
+            const errorText = document.createElement('p')
+            errorText.innerHTML = err.message
+            errorText.classList.add('error')
+            signupForm.insertBefore(errorText, elementBefore)
+            
+        })
+})
+
+// handle login user
+loginForm.addEventListener('submit', (e) => {
+  e.preventDefault()
+  
+  removeErrorMessage()
+  
+  const email = loginForm.email.value
+  const password = loginForm.password.value
+  
+  signInWithEmailAndPassword(auth, email, password)
+      .then((cred) => {
+            loginForm.reset()
+            goHome()
+        })
+        .catch((err) => {
+            const elementBefore = loginForm.querySelector('#login-form p')
+            const errorText = document.createElement('p')
+            errorText.innerHTML = err.message
+            errorText.classList.add('error')
+            loginForm.insertBefore(errorText, elementBefore)
+        })
+})
+
+// handle logout user
+logoutLink.addEventListener('click', ()=> {
+      Swal.fire({
+        title: 'Are you sure?',
+        icon: 'question',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No'
+      }).then((result) => {
+        if (result.isConfirmed) {
+          signOut(auth).
+            then(()=> {
+              goHome()
+            })
+            .catch((err)=> {
+              console.log(err.message)
+            })
+        }
+      })
+  
+})
+
+// function to remove previous auth error message
+function removeErrorMessage() {
+    const errorMessage = document.querySelector('.error')
+    if(errorMessage){
+      errorMessage.remove()
+    }
+}
+
+/**
+ * end handle auth user
+*/
+
+
+// select skin depends on the level
+
+/**
+ * DOM interaction
+ */
+ 
+// open nav menu
+navButton.addEventListener('click',()=>{
+  navUl.classList.add('toggle-nav')
+})
+
+// outside click
+window.addEventListener('click',(e)=>{
+  let clickedElement = e.target
+  do {
+    if(clickedElement == navButton){
+      return
+    }
+    if(clickedElement == navUl){
+      return
+    }
+    clickedElement = clickedElement.parentNode
+  } while (clickedElement)
+  navUl.classList.remove('toggle-nav')
+})
+
+/**
+ * Handle open/close login and signup form
+*/
+
+// show signup form from menu
+authLink.addEventListener('click', ()=> {
+  openForm('signup')
+})
+
+// close signup form
+signupClose.addEventListener('click', ()=> {
+  closeForm('signup')
+})
+
+// show login form from signup form
+loginLink.addEventListener('click', ()=> {
+  openForm('login')
+  
+})
+
+// close login form
+loginClose.addEventListener('click', ()=> {
+  closeForm('login')
+})
+
+// show signup form from login form
+signupLink.addEventListener('click', ()=> {
+  openForm('signup')
+})
+
+// function to open form
+function openForm(form){
+  if(form === 'signup') {
+    signupBox.style.display = 'grid'
+    loginBox.style.display = 'none'
+  } 
+  if(form === 'login') {
+    console.log('here')
+    signupBox.style.display = 'none'
+    loginBox.style.display = 'grid'
+  }
+  
+  navUl.classList.remove('toggle-nav')
+  removeErrorMessage()
+  signupForm.reset()
+  loginForm.reset()
+}
+
+// function to close form
+function closeForm(form){
+  if(form === 'signup') {
+    signupBox.style.display = 'none'
+  } 
+  if(form === 'login') {
+    loginBox.style.display = 'none'
+  }
+  removeErrorMessage()
+  signupForm.reset()
+  loginForm.reset()
+}
+
+/**
+ * end handle open/close form
+*/
+
+/**
+ * end DOM interaction
+*/
