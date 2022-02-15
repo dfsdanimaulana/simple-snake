@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Snake Game</title>
+  <link rel="stylesheet" href="style.css" type="text/css" media="all" />
+  <!-- sweet alert -->
+  <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+  <!-- Font awesome -->
+  <script src="https://kit.fontawesome.com/7a3f1d0e46.js" crossorigin="anonymous"></script>
+  <script src="bundle.js" defer></script>
+</head>
+<body>
+  <nav>
+    <h1>Simple Snake</h1>
+    <ul class="nav-ul">
+      <li id="auth-link">Login/Register</li>
+      <li id="setting">Settings</li>
+      <li id="scoreboard">Scoreboard</li>
+      <li><a href="https://twice-memory.herokuapp.com">Card Game</a></li>
+      <li id="logout-link">Logout</li>
+    </ul>
+    <span class="nav-button">
+      <i class="fas fa-bars"></i>
+    </span>
+  </nav>
+  <div id="board">
+    <div id="game-board"></div>
+    <div id="point">Score : <span id="point-value"></span></div>
+  </div>
+  <div id="keyboard">
+      <button class="key" id="up">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+      <div class="mid">
+        <button class="key" id="left">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="key" id="boost">boost</button>
+        <button class="key" id="right">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+      <button class="key" id="down">
+        <i class="fas fa-arrow-down"></i>
+      </button>
+  </div>
+  <div class="form-backdrop" id="signup">
+    <form class="auth-form" id="signup-form">
+      <span class="close">x</span>
+      <h1>Signup</h1>
+      <div class="form-input">
+        <label for="username">Username:</label>
+        <input type="text" name="username" id="username" required autocomplete="off"/>
+      </div>
+      <div class="form-input">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required />
+      </div>
+      <div class="form-input">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" value="" required />
+      </div>
+      <button type="submit" class="btn">Signup</button>
+      <p>Already have an account? <span id="login-link">login here</span></p>
+    </form>
+  </div>
+  
+  <div class="form-backdrop" id="login">
+    <form class="auth-form" id="login-form">
+      <span class="close">x</span>
+      <h1>Login</h1>
+      <div class="form-input">
+        <label for="email">Email:</label>
+        <input type="email" name="email" id="email" required/>
+      </div>
+      <div class="form-input">
+        <label for="password">Password:</label>
+        <input type="password" name="password" id="password" value="" required/>
+      </div>
+      <button type="submit" class="btn">Login:</button>
+      <p>New user? <span id="signup-link">Signup here</span></p>
+    </form>
+  </div>
+</body>
+</html>
