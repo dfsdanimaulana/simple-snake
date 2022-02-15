@@ -73,17 +73,38 @@ window.requestAnimationFrame(main)
 // main Function
 function main(currentTime) {
   if(gameOver){
-      
-      //update score in user firestore
-      updateUserScore()
-      
-      Swal.fire(
-        'Game Over!',
-        "Don't give up and try again 😊",
-        'error'
-      ).then(()=>{
-        goHome()
-      })
+      // ask user to login/signup if not yet
+      if(currentUser){
+        //update score in user firestore
+        updateUserScore()
+        
+        Swal.fire(
+          'Game Over!',
+          "Don't give up and try again 😊",
+          'error'
+        ).then(()=>{
+          goHome()
+        })
+      } else {
+        Swal.fire({
+          title: 'Game over!',
+          icon: 'info',
+          text:'Create account to save your game data',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Login/signup',
+          cancelButtonText: 'No, Thanks'
+        }).then((result) => {
+          if (result.isConfirmed) {
+            openForm('signup')
+            signupClose.innerHTML = '<a href="/simple-snake">x</a>'
+            loginClose.innerHTML = '<a href="/simple-snake">x</a>'
+          } else {
+            goHome()
+          }
+        })
+      }
       return
   }
   const secondSinceLastRender = (currentTime - lastRenderTime)/1000
@@ -144,7 +165,7 @@ onSnapshot(colRef, (snapshot) => {
     snapshot.docs.forEach((doc) => {
         score.push({ ...doc.data(), id: doc.id })
     })
-    if(currentUser){
+    if(currentUser && score.length > 0){
       userData = score.filter(s=> {
         return s.uid === currentUser.uid
       })[0]
@@ -154,12 +175,13 @@ onSnapshot(colRef, (snapshot) => {
 
 function updateUserScore() {
   if(currentUser && userData){
-    if(userData.score > updatePoint()) return
+    const newScore = updatePoint()
+    if(userData.score > newScore) return
       const docRef = doc(db, 'scores', userData.id)
       updateDoc(docRef, {
-          score :updatePoint()
-      }).then((res) => {
-          console.log(res)
+          score : newScore
+      }).then(() => {
+          console.log('score updated')
       }).catch((err)=>{
         console.log(err.message)
       })
@@ -179,6 +201,7 @@ function updateUserScore() {
 // cek if user is logged in
 onAuthStateChanged(auth, (user) => {
   if(user) {
+    sessionStorage.setItem('currentUser', JSON.stringify(user))
     currentUser = user
     // create user displayname list
     const nameList = document.createElement('li')
@@ -231,13 +254,12 @@ signupForm.addEventListener('submit', (e) => {
                     score: 0
                   })
                   .then((res)=>{
-                    console.log(res)
+                    goHome()
                   })
                   .catch((err)=>{
                     console.log(err.message)
                   })
                 })
-           goHome()
         })
         .catch((err) => {
             const elementBefore = signupForm.querySelector('#signup-form p')
@@ -372,7 +394,6 @@ function openForm(form){
     loginBox.style.display = 'none'
   } 
   if(form === 'login') {
-    console.log('here')
     signupBox.style.display = 'none'
     loginBox.style.display = 'grid'
   }

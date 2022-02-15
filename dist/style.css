@@ -123,6 +123,10 @@ nav span {
   font-size: 20px;
 }
 
+.close a {
+  color:#000;
+}
+
 .form-input input {
   width: 100%;
   height: 20px;

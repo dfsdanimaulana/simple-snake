@@ -1,5 +1,10 @@
 import { config } from './config.js'
 
+const up = document.getElementById('up')
+const down = document.getElementById('down')
+const left = document.getElementById('left')
+const right = document.getElementById('right')
+
 let inputDirection = { x:0, y:0 }
 let lastInputDirection = { x:0, y:0 }
 let snakeSpeed = config.SNAKE_SPEED
@@ -26,29 +31,25 @@ window.addEventListener('keydown', (e)=>{
   }
 })
 
-const keys = document.querySelectorAll('.key')
+// handle arroy key
+up.addEventListener('click', ()=> {
+  if(lastInputDirection.y !== 0) return
+  inputDirection = { x:0, y:-1}
+})
 
-keys.forEach(key => {
-  key.addEventListener('click', (e)=>{
-    switch (e.target.id) {
-    case 'up':
-      if(lastInputDirection.y !== 0) break
-      inputDirection = { x:0, y:-1}
-      break;
-    case 'down':
-      if(lastInputDirection.y !== 0) break
-      inputDirection = { x:0, y:1}
-      break;
-    case 'left':
-      if(lastInputDirection.x !== 0) break
-      inputDirection = { x:-1, y:0}
-      break;
-    case 'right':
-      if(lastInputDirection.x !== 0) break
-      inputDirection = { x:1, y:0}
-      break;
-  }
-  })
+down.addEventListener('click', ()=> {
+  if(lastInputDirection.y !== 0) return
+  inputDirection = { x:0, y:1}
+})
+
+left.addEventListener('click', ()=> {
+  if(lastInputDirection.x !== 0) return
+  inputDirection = { x:-1, y:0}
+})
+
+right.addEventListener('click', ()=> {
+  if(lastInputDirection.x !== 0) return
+  inputDirection = { x:1, y:0}
 })
 
 export function getInputDirection(){
