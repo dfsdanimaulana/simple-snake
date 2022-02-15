@@ -44,7 +44,7 @@ function main(currentTime) {
         "Don't give up and try again 😊",
         'error'
       ).then(()=>{
-        window.location = '/snake-js'
+        window.location = '/simple-snake'
       })
       return
   }
