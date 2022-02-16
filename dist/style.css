@@ -277,10 +277,8 @@ nav span {
     sidebar {
         display: block;
     }
-
-    #board {
-        height: 80vh;
-        width: 80vh;
+    .snake {
+        border-radius: 8px;
     }
     #keyboard,
     nav {
