@@ -507,6 +507,3 @@ function closeForm(form) {
  * end DOM interaction
  */
 
-document.querySelector('sidebar').addEventListener('click', () => {
-    console.log('here')
-})
