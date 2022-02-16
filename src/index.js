@@ -157,7 +157,7 @@ function goHome() {
 
 const colRef = collection(db, 'scores')
 
-const q = query(colRef, orderBy('score', 'desc'), limit(10))
+const q = query(colRef, orderBy('score', 'desc'))
 // realtime Listener firestore database
 
 let tableText = ''
@@ -170,7 +170,7 @@ onSnapshot(
         })
         if (currentUser && score.length > 0) {
             userData = score.filter((s) => {
-                return s.uid === currentUser.uid
+                return s.uid == currentUser.uid
             })[0]
             bestScore.innerHTML = 'Best : ' + userData.score
         }
@@ -309,15 +309,15 @@ signupForm.addEventListener('submit', (e) => {
                     foodShape: '50%',
                     foodColor: '#ff7c4f',
                     foodIcon: '',
-                    snakeShape: '5px',
-                    snakeHead: '#0e91ff',
-                    snakeBody: '#79e4ff',
+                    snakeShape: '8px',
+                    snakeHead: '#cf7917',
+                    snakeBody: '#bab63f',
                     snakeBorder: '.25vmin solid balck',
                     snakeBoost: '25vmin solid yellow',
                     navColor: '#2d9de6',
                     boardColor: '#eaeaea',
                     sideColor: '#fff',
-                    keyColor: '3b3b3b',
+                    keyColor: '#3b3b3b',
                     keyColorBackground: '#fff',
                 })
                     .then(() => {
@@ -403,7 +403,25 @@ function removeErrorMessage() {
  * end handle auth user
  */
 
-// select skin depends on the level
+/**
+ *  Game Settings
+ */
+ const snakeFragment = document.querySelectorAll('.snake')
+ 
+ if(userData){
+   // body color
+   snakeFragment.forEach((fragment)=>{
+     fragment.style.backgroundColor = userData.snakeBody
+     fragment.style.border = userData.snakeBorder
+     fragment.style.borderRadius = userData.snakeShape
+   })
+   // head color
+   snakeFragment[0].style.backgroundColor = userData.snakeHead
+ }
+ 
+/**
+ *  end Game Settings
+ */
 
 /**
  * DOM interaction
