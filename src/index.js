@@ -165,6 +165,7 @@ function goHome(){
 */
  
 const colRef = collection(db, 'scores')
+const colSet = collection(db, 'settings')
 
 const q = query(colRef, orderBy('score','desc'), limit(10))
 // realtime Listener firestore database
@@ -308,15 +309,29 @@ signupForm.addEventListener('submit', (e) => {
                     uid: user.uid,
                     username: user.displayName,
                     createdAt: serverTimestamp(),
-                    score: 0
+                    score: 0,
+                    foodShape:'50%',
+                    foodColor:'#ff7c4f',
+                    foodIcon:'',
+                    snakeShape:'5px',
+                    snakeHead:'#0e91ff',
+                    snakeBody:'#79e4ff',
+                    snakeBorder:'.25vmin solid balck',
+                    snakeBoost:'25vmin solid yellow',
+                    navColor:'#2d9de6',
+                    boardColor:'#eaeaea',
+                    sideColor:'#fff',
+                    keyColor:'3b3b3b',
+                    keyColorBackground:'#fff'
                   })
                   .then((res)=>{
-                    goHome()
+                      goHome()
                   })
                   .catch((err)=>{
                     console.log(err.message)
                   })
-                })
+                  
+            })
         })
         .catch((err) => {
             const elementBefore = signupForm.querySelector('#signup-form p')
@@ -433,10 +448,10 @@ window.addEventListener('click',(e)=>{
 
 // show signup form from menu
 authLink.addEventListener('click', ()=> {
-  openForm('signup')
+  openForm('login')
 })
 authLinkSide.addEventListener('click', ()=> {
-  openForm('signup')
+  openForm('login')
 })
 
 // close signup form
