@@ -259,6 +259,14 @@ nav span {
     margin: 10px;
 }
 
+.space {
+    display: none;
+    position: fixed;
+    bottom: 10px;
+    left: 10px;
+    color: #fff;
+}
+
 /* Desktop view */
 @media screen and (min-width: 600px) {
     body {
@@ -285,7 +293,9 @@ nav span {
         top: 10px;
         left: 10px;
     }
-
+    .space {
+        display: block;
+    }
     #best-score {
         position: fixed;
         top: 30px;
