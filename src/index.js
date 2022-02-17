@@ -75,17 +75,37 @@ window.requestAnimationFrame(main)
 function main(currentTime) {
     if (gameOver) {
         // ask user to login/signup if not yet
-        if (currentUser) {
+        if (currentUser && username) {
             //update score in user firestore
-            updateUserScore()
-
-            Swal.fire(
-                'Game Over!',
-                "Don't give up and try again 😊",
-                'error',
-            ).then(() => {
-                goHome()
+            const newScore = updatePoint()
+            if (userData.score > newScore) {
+                Swal.fire(
+                    'Game Over!',
+                    "Don't give up and try again 😊",
+                    'error',
+                ).then(() => {  
+                    goHome()
+                })
+            } else {
+            const docRef = doc(db, 'scores', userData.id)
+            updateDoc(docRef, {
+                score: newScore,
+            }).then(() => {
+                Swal.fire(
+                    'Game Over!',
+                    "You have new game record 😊",
+                    'success',
+                ).then(() => {
+                  
+                    goHome()
+                
+                })
+                
             })
+            .catch((err) => {
+                console.log(err.message)
+            })
+            }
         } else {
             Swal.fire({
                 title: 'Game over!',
@@ -98,7 +118,7 @@ function main(currentTime) {
                 cancelButtonText: 'No, Thanks',
             }).then((result) => {
                 if (result.isConfirmed) {
-                    openForm('signup')
+                    openForm('login')
                     signupClose.innerHTML = '<a href="/simple-snake">x</a>'
                     loginClose.innerHTML = '<a href="/simple-snake">x</a>'
                 } else {
@@ -424,12 +444,95 @@ function removeErrorMessage() {
  */
 
 /**
+ *  Chat settings
+ */
+ const chat = document.querySelector('.chat')
+ const chatButton = document.querySelector('.chat-box')
+ const chatClose = document.querySelector('#chat .close')
+ const chatBox = document.getElementById('chat')
+ const chatForm = document.querySelector('.chat-input')
+ const chatContent = document.querySelector('.chat-content')
+ 
+ chatButton.addEventListener('click', ()=>{
+   if(currentUser){
+      chatBox.style.display = 'grid'
+   } else {
+      Swal.fire({
+          text: 'Please login first',
+          showCancelButton: true,
+          confirmButtonColor: '#3085d6',
+          cancelButtonColor: '#d33',
+          confirmButtonText: 'Login/signup',
+          cancelButtonText: 'No, Thanks',
+      }).then((result) => {
+          if (result.isConfirmed) {
+              openForm('login')
+          }
+      })
+   }
+ })
+ chatClose.addEventListener('click', ()=>{
+   chatBox.style.display = 'none'
+ })
+ 
+ // send chat message
+ const colChatRef = collection(db,'chats')
+ 
+ chatForm.addEventListener('submit',(e)=>{
+   e.preventDefault()
+   
+   addDoc(colChatRef, {
+     msg: chatForm.msg.value,
+     uid: currentUser.uid,
+     username: currentUser.displayName,
+     createdAt: serverTimestamp()
+   })
+   .then((res)=>{
+      chatForm.reset()
+   })
+   .catch((err)=>{
+     console.log(err.message)
+   })
+ })
+ 
+ 
+ // get all chat document
+ onSnapshot(query(colChatRef, orderBy('createdAt','desc')), (snapshot)=> {
+   let chats = []
+    snapshot.docs.forEach((doc) => {
+        chats.push({ ...doc.data(), id: doc.id })
+    },(err)=>{
+      console.log(err.message)
+    })
+    if(chats.length > 0){
+        
+        let textNode = ''
+        chats.forEach((chat)=>{
+          textNode += 
+          `<div class="message">
+            <p>${chat.username}</p>
+            <p>${chat.msg}</p>
+            <p>a day ago</p>
+          </div>`
+        })
+        console.log(textNode)
+        chatContent.innerHTML = textNode
+    }
+ }) 
+/**
+ *  End Chat settings
+ */
+ 
+/**
  * DOM interaction
  */
+ 
 scoreboard.addEventListener('click', () => {
     Swal.fire({
         title: '<strong>Scoreboard</strong>',
-        html: `<table id="popup-table">${tableText}</table>`,
+        html: `<div class="table-box">
+        <table id="popup-table">${tableText}</table>
+        </div>`,
         showCloseButton: true,
     })
 })
@@ -439,20 +542,6 @@ navButton.addEventListener('click', () => {
     navUl.classList.add('toggle-nav')
 })
 
-// outside click
-window.addEventListener('click', (e) => {
-    let clickedElement = e.target
-    do {
-        if (clickedElement == navButton) {
-            return
-        }
-        if (clickedElement == navUl) {
-            return
-        }
-        clickedElement = clickedElement.parentNode
-    } while (clickedElement)
-    navUl.classList.remove('toggle-nav')
-})
 
 /**
  * Handle open/close login and signup form
@@ -525,3 +614,24 @@ function closeForm(form) {
  * end DOM interaction
  */
 
+// outside click
+window.addEventListener('click', (e) => {
+    let clickedElement = e.target
+    do {
+        if (clickedElement == navButton) {
+            return
+        }
+        if (clickedElement == navUl) {
+            return
+        }
+        if (clickedElement == chatButton) {
+            return
+        }
+        if (clickedElement == chat) {
+            return
+        }
+        clickedElement = clickedElement.parentNode
+    } while (clickedElement)
+    navUl.classList.remove('toggle-nav')
+    chatBox.style.display = 'none'
+})

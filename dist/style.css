@@ -74,6 +74,86 @@ sidebar table {
     width: 100%;
 }
 
+.chat-box {
+  position: fixed;
+  bottom: 20px;
+  right: 20px;
+  z-index: 30;
+  color: #fff;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  display: grid;
+  place-items: center;
+  background-color: var(--nav-blue);
+  cursor: pointer;
+}
+
+.chat {
+  position: relative;
+  width: 95vw;
+  height: 60vh;
+  background-color: #fff;
+  border-radius: 5px;
+  padding: 10px;
+}
+.chat-content {
+  display: flex;
+  flex-direction: column-reverse;
+  max-height: 80%;
+  border: 1px solid grey;
+  margin-bottom: 20px;
+  border-radius: 3px;
+  overflow: auto;
+}
+.chat-input  {
+  display: flex;
+  justify-content: space-between;
+}
+
+.chat-input input {
+  height: 30px;
+  width: 80%;
+  border: 1px solid var(--nav-blue);
+  border-radius: 5px;
+  background-color: #fff;
+}
+.chat-input button {
+  height: 30px;
+  width: 50px;
+  border-radius: 8px;
+  background-color: var(--soft-green);
+  border: none;
+  
+}
+.message {
+  max-width: 80%;
+  margin: 10px;
+  padding: 3px;
+  background-color: #fff;
+  text-align: left;
+  border-radius: 5px;
+  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+}
+
+.m-right {
+  align-self: flex-end;
+}
+
+.message p:nth-child(1){
+  font-size: 12px;
+}
+.message p:nth-child(2){
+  font-size: 14px;
+}
+.message p:nth-child(3){
+  font-size: 10px;
+  text-align: right;
+}
+.table-box {
+  max-height: 250px;
+  overflow: auto;
+}
 .col,
 .col-score {
     text-align: center;
@@ -110,7 +190,7 @@ nav h1 {
     width: 50vw;
     padding: 20px;
     transition: all ease-out 0.5s;
-    z-index: 10;
+    z-index: 100;
 }
 
 .nav-ul li {
@@ -137,9 +217,10 @@ nav span {
 .form-backdrop {
     inset: 0;
     position: fixed;
-    background-color: rgba(0, 0, 0, 0.25);
+    background-color: rgba(0, 0, 0, 0.3);
     display: grid;
     place-items: center;
+    z-index: 999;
 }
 
 .auth-form {
@@ -188,7 +269,7 @@ nav span {
 }
 
 #login,
-#signup {
+#signup, #chat {
     display: none;
 }
 

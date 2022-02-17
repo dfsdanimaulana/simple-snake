@@ -37,7 +37,9 @@
     <h1 class="header-tag">Simple Snake</h1>
     <div id="scoreboard-box">
       <h3>Scoreboard</h3>
-      <table></table>
+      <div class="table-box">
+        <table></table>
+      </div>
       <ul class="side-ul">
         <li id="auth-link-side">Login/Register</li>
         <li id="setting-side">Settings</li>
@@ -103,5 +105,18 @@
     </form>
   </div>
   <p class="space">[SPACE] : Boost</p>
+  <div class="chat-box"><i class="fas fa-comment"></i></div>
+  <div class="form-backdrop" id="chat">
+    <div class="chat">
+      <span class="close">x</span>
+      <h1>Chat Room</h1>
+      <div class="chat-content">
+      </div>
+      <form class="chat-input">
+        <input type="text" name="msg" id="msg" required>
+        <button type="submit">Send</button>
+      </form>
+    </div>
+  </div>
 </body>
 </html>
