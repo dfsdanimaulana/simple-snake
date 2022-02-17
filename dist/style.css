@@ -108,7 +108,7 @@ sidebar table {
 .chat-content {
   display: flex;
   flex-direction: column-reverse;
-  max-height: 75%;
+  height: 75%;
   margin-bottom: 20px;
   border-radius: 3px;
   overflow: auto;
