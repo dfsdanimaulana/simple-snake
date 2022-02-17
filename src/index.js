@@ -1,6 +1,6 @@
 // firebase import
 import { auth, db } from './firebase.js'
-
+import formatDistanceToNow from 'date-fns/formatDistanceToNow'
 import {
     createUserWithEmailAndPassword,
     signInWithEmailAndPassword,
@@ -58,6 +58,7 @@ const loginForm = document.querySelector('#login-form')
 const signupForm = document.querySelector('#signup-form')
 const bestScore = document.querySelector('#best-score')
 const sidebar = document.querySelector('sidebar')
+const loader = document.querySelector('.loader')
 
 /**
  * Game logic
@@ -184,6 +185,7 @@ let tableText = ''
 onSnapshot(
     q,
     (snapshot) => {
+        loader.style.display = 'none'
         let score = []
         snapshot.docs.forEach((doc) => {
             score.push({ ...doc.data(), id: doc.id })
@@ -199,11 +201,12 @@ onSnapshot(
 
         if (score.length > 0) {
             score.forEach((s, i) => {
-                textNode += `<tr>
-          <td class="col">${i + 1}</td>
-          <td>${s.username}</td>
-          <td class="col-score">${s.score}</td>
-        </tr>`
+                textNode += 
+                `<tr>
+                  <td class="col">${i + 1}</td>
+                  <td>${s.username}</td>
+                  <td class="col-score">${s.score}</td>
+                </tr>`
             })
         }
 
@@ -505,17 +508,27 @@ function removeErrorMessage() {
       console.log(err.message)
     })
     if(chats.length > 0){
-        
         let textNode = ''
-        chats.forEach((chat)=>{
-          textNode += 
-          `<div class="message">
-            <p>${chat.username}</p>
-            <p>${chat.msg}</p>
-            <p>a day ago</p>
-          </div>`
+        chats.map((chat)=>{
+          if(currentUser){
+            if(chat.uid === currentUser.uid){
+              textNode += 
+              `<div class="message m-right" >
+                <p>you</p>
+                <p>${chat.msg}</p>
+                <p>${formatDistanceToNow(chat.createdAt.toDate(), { addSuffix:true })}</p>
+              </div>`
+            } else {
+              textNode += 
+              `<div class="message" >
+                <p>${chat.username}</p>
+                <p>${chat.msg}</p>
+                <p>${formatDistanceToNow(chat.createdAt.toDate(), { addSuffix:true })}</p>
+              </div>`
+              
+            }
+          }
         })
-        console.log(textNode)
         chatContent.innerHTML = textNode
     }
  }) 
