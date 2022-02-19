@@ -132,7 +132,7 @@ sidebar table {
     width: 80%;
     border: 1px solid var(--nav-blue);
     border-radius: 5px;
-    background-color: lightblue;
+    background-color: #eaeaea;
 }
 .chat-input button {
     height: 30px;
@@ -214,7 +214,7 @@ nav h1 {
 .nav-ul li {
     display: block;
     margin-bottom: 20px;
-    font-size: 30px;
+    font-size: 20px;
 }
 
 .toggle-nav {

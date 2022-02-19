@@ -442,6 +442,7 @@ const chatContent = document.querySelector('.chat-content')
 chatButton.addEventListener('click', () => {
     if (currentUser) {
         chatBox.style.display = 'grid'
+        chatForm.msg.focus()
     } else {
         Swal.fire({
             text: 'Please login first',
@@ -475,6 +476,7 @@ chatForm.addEventListener('submit', (e) => {
     })
         .then((res) => {
             chatForm.reset()
+            chatForm.msg.focus()
         })
         .catch((err) => {
             console.log(err.message)
