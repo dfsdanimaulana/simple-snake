@@ -75,7 +75,7 @@ const boardColor = document.getElementById('boardColor')
 const keyColor = document.getElementById('keyColor')
 const navColor = document.getElementById('navColor')
 const navbar = document.querySelector('nav')
-const key = document.querySelector('.key')
+const keys = document.querySelectorAll('.key')
 /**
  * Game logic
  */
@@ -258,7 +258,9 @@ onSnapshot(
       if(userData){
         navbar.style.backgroundColor = userData.navColor
         gameBoard.style.backgroundColor = userData.boardColor
-        key.style.backgroundColor = userData.keyColor
+        keys.forEach((key)=>{
+          key.style.backgroundColor = userData.keyColor
+        })
       }
     },
     (err) => {
@@ -451,6 +453,10 @@ settingLink.addEventListener('click',()=>{
   settingsBackdrop.style.display = 'grid'
 })
 
+settingLinkSide.addEventListener('click',()=>{
+  settingsBackdrop.style.display = 'grid'
+})
+
 closeSetting.addEventListener('click',()=>{
   settingsBackdrop.style.display = 'none'
   setColor()
@@ -475,7 +481,7 @@ colorSettingForm.addEventListener('submit', (e)=>{
     
   })
   .then(()=> {
-    Swal.fire('Success update settings').then(()=>{
+    Swal.fire({ icon:'success',text:'Update success'}).then(()=>{
       goHome()
     })
   })
@@ -683,6 +689,9 @@ window.addEventListener('click', (e) => {
             return
         }
         if (clickedElement == colorSettingForm) {
+            return
+        }
+        if (clickedElement == settingLinkSide) {
             return
         }
         clickedElement = clickedElement.parentNode
