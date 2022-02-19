@@ -59,7 +59,10 @@ const signupForm = document.querySelector('#signup-form')
 const bestScore = document.querySelector('#best-score')
 const sidebar = document.querySelector('sidebar')
 const loader = document.querySelector('.loader')
-
+const multi = document.querySelector('#multiplayer')
+multi.addEventListener('click',()=>{
+  Swal.fire('Coming Soon...')
+})
 /**
  * Game logic
  */
@@ -228,6 +231,8 @@ onSnapshot(
         <th>Name</th>
         <th>Score</th>
       </tr>` + textNode
+      
+      // set snake and apple attrbutefrom user data
     },
     (err) => {
         console.log(err.message)
