@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <meta http-equiv="X-UA-Compatible" content="ie=edge">
   <title>Snake Game by @dnm17_</title>
-   <meta
-      name="description"
-      content="Simple Snake Game created by @dnm17_" />
+  <meta
+  name="description"
+  content="Simple Snake Game created by @dnm17_" />
   <link rel="shortcut icon" href="dist/favicon.png">
   <link rel="stylesheet" href="dist/style.css" type="text/css" media="all" />
   <!-- sweet alert -->
@@ -27,14 +27,15 @@
       <li><a href="https://instagram.com/dnm17_" target="_blank">Contact me</a></li>
       <li id="logout-link">Logout</li>
     </ul>
-    </ul>
     <span class="nav-button">
       <i class="fas fa-bars"></i>
     </span>
   </nav>
   <div id="board">
     <div id="game-board"></div>
-    <div id="point">Score : <span id="point-value"></span></div>
+    <div id="point">
+      Score : <span id="point-value"></span>
+    </div>
     <div id="best-score"></div>
   </div>
   <sidebar>
@@ -55,21 +56,21 @@
     </div>
   </sidebar>
   <div id="keyboard">
-      <button class="key" id="up">
-        <i class="fas fa-arrow-up"></i>
+    <button class="key" id="up">
+      <i class="fas fa-arrow-up"></i>
+    </button>
+    <div class="mid">
+      <button class="key" id="left">
+        <i class="fas fa-arrow-left"></i>
       </button>
-      <div class="mid">
-        <button class="key" id="left">
-          <i class="fas fa-arrow-left"></i>
-        </button>
-        <button class="key" id="boost">boost</button>
-        <button class="key" id="right">
-          <i class="fas fa-arrow-right"></i>
-        </button>
-      </div>
-      <button class="key" id="down">
-        <i class="fas fa-arrow-down"></i>
+      <button class="key" id="boost">boost</button>
+      <button class="key" id="right">
+        <i class="fas fa-arrow-right"></i>
       </button>
+    </div>
+    <button class="key" id="down">
+      <i class="fas fa-arrow-down"></i>
+    </button>
   </div>
   <div class="form-backdrop" id="signup">
     <form class="auth-form" id="signup-form">
@@ -77,7 +78,7 @@
       <h1>Signup</h1>
       <div class="form-input">
         <label for="username">Username:</label>
-        <input type="text" name="username" id="username" required autocomplete="off"/>
+        <input type="text" name="username" id="username" required autocomplete="off" />
       </div>
       <div class="form-input">
         <label for="email">Email:</label>
@@ -88,33 +89,43 @@
         <input type="password" name="password" id="password_sign" value="" required />
       </div>
       <button type="submit" class="btn">Signup</button>
-      <p>Already have an account? <span id="login-link">login here</span></p>
+      <p>
+        Already have an account? <span id="login-link">login here</span>
+      </p>
     </form>
   </div>
-  
+
   <div class="form-backdrop" id="login">
     <form class="auth-form" id="login-form">
       <span class="close">x</span>
       <h1>Login</h1>
       <div class="form-input">
         <label for="email">Email:</label>
-        <input type="email" name="email" id="email" required/>
+        <input type="email" name="email" id="email" required />
       </div>
       <div class="form-input">
         <label for="password">Password:</label>
-        <input type="password" name="password" id="password" value="" required/>
+        <input type="password" name="password" id="password" value="" required />
       </div>
       <button type="submit" class="btn">Login</button>
-      <p>New user? <span id="signup-link">Signup here</span></p>
+      <p>
+        New user? <span id="signup-link">Signup here</span>
+      </p>
     </form>
   </div>
-  <p class="space">[SPACE] : Boost</p>
-  <div class="chat-box"><i class="fas fa-comment"></i></div>
+  <p class="space">
+    [SPACE] : Boost
+  </p>
+  <div class="chat-box">
+    <i class="fas fa-comment"></i>
+  </div>
   <div class="form-backdrop" id="chat">
     <div class="chat">
       <span class="close">x</span>
       <h1>Chat Room</h1>
-      <p class="info"> Please tell me if you find some bug. Thanks... 😁 </p>
+      <p class="info">
+        Please tell me if you find some bug. Thanks... 😁
+      </p>
       <div class="chat-content">
       </div>
       <form class="chat-input">
@@ -123,6 +134,47 @@
       </form>
     </div>
   </div>
-  <div class="loader"><div>Loading...</div></div>
+  <div class="form-backdrop" id="settings-backdrop">
+    <div class="settings-box">
+      <h2>Settings</h2>
+      <form id="settings-form" class="auth-form">
+        <span class="close">x</span>
+        <div class="input-color">
+          <label for="snakeHeadColor">snakeHeadColor</label>
+          <input type="color" name="snakeHeadColor" id="snakeHeadColor" />
+        </div>
+        <div class="input-color">
+          <label for="snakeBodyColor">snakeBodyColor</label>
+          <input type="color" name="snakeBodyColor" id="snakeBodyColor" />
+        </div>
+        <div class="input-color">
+          <label for="snakeBorderColor">snakeBorderColor</label>
+          <input type="color" name="snakeBorderColor" id="snakeBorderColor" />
+        </div>
+        <div class="input-color">
+          <label for="snakeBoostColor">snakeBoostColor</label>
+          <input type="color" name="snakeBoostColor" id="snakeBoostColor" />
+        </div>
+        <div class="input-color">
+          <label for="boardColor">boardColor</label>
+          <input type="color" name="boardColor" id="boardColor" />
+        </div>
+        <div class="input-color">
+          <label for="navColor">navColor</label>
+          <input type="color" name="navColor" id="navColor" />
+        </div>
+        <div class="input-color">
+          <label for="keyColor">keyColor</label>
+          <input type="color" name="keyColor" id="keyColor" />
+        </div>
+        <button type="submit">Save</button>
+      </form>
+    </div>
+  </div>
+  <div class="loader">
+    <div>
+      Loading...
+    </div>
+  </div>
 </body>
 </html>

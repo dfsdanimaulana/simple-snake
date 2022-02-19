@@ -58,6 +58,24 @@ const signupForm = document.querySelector('#signup-form')
 const bestScore = document.querySelector('#best-score')
 const sidebar = document.querySelector('sidebar')
 const loader = document.querySelector('.loader')
+const chat = document.querySelector('.chat')
+const chatButton = document.querySelector('.chat-box')
+const chatClose = document.querySelector('#chat .close')
+const chatBox = document.getElementById('chat')
+const chatForm = document.querySelector('.chat-input')
+const chatContent = document.querySelector('.chat-content')
+const settingsBackdrop = document.getElementById('settings-backdrop')
+const colorSettingForm = document.getElementById('settings-form')
+const closeSetting = document.querySelector('#settings-form .close')
+const snakeHeadColor = document.getElementById('snakeHeadColor')
+const snakeBodyColor = document.getElementById('snakeBodyColor')
+const snakeBorderColor = document.getElementById('snakeBorderColor')
+const snakeBoostColor = document.getElementById('snakeBoostColor')
+const boardColor = document.getElementById('boardColor')
+const keyColor = document.getElementById('keyColor')
+const navColor = document.getElementById('navColor')
+const navbar = document.querySelector('nav')
+const key = document.querySelector('.key')
 /**
  * Game logic
  */
@@ -67,8 +85,6 @@ let lastRenderTime = 0
 let gameOver = false
 let currentUser = null
 let userData = null
-
-window.requestAnimationFrame(main)
 
 // main Function
 function main(currentTime) {
@@ -171,6 +187,16 @@ function goHome() {
 /**
  * score logic
  */
+function setColor() {
+    // set color
+    snakeHeadColor.value = userData.snakeHead
+    snakeBodyColor.value = userData.snakeBody
+    snakeBorderColor.value = userData.snakeBorder
+    snakeBoostColor.value = userData.snakeBoost
+    navColor.value = userData.navColor
+    boardColor.value = userData.boardColor
+    keyColor.value = userData.keyColor
+}
 
 const colRef = collection(db, 'scores')
 
@@ -191,11 +217,15 @@ onSnapshot(
                 return s.uid == currentUser.uid
             })[0]
             bestScore.innerHTML = 'Best : ' + userData.score
+            setColor()
+            
+            
         }
 
         let textNode = ''
 
         if (score.length > 0) {
+            window.requestAnimationFrame(main)
             score.forEach((s, i) => {
                 textNode += `<tr>
                   <td class="col">${i + 1}</td>
@@ -223,14 +253,22 @@ onSnapshot(
         <th>Name</th>
         <th>Score</th>
       </tr>` + textNode
-
-        // set snake and apple attrbutefrom user data
+      
+      // set color
+      if(userData){
+        navbar.style.backgroundColor = userData.navColor
+        gameBoard.style.backgroundColor = userData.boardColor
+        key.style.backgroundColor = userData.keyColor
+      }
     },
     (err) => {
         console.log(err.message)
     },
 )
 
+export function getUser(){
+  return userData
+}
 /**
  * end score logic
  */
@@ -312,10 +350,10 @@ signupForm.addEventListener('submit', (e) => {
                     foodColor: '#ff7c4f',
                     foodIcon: '',
                     snakeShape: '8px',
-                    snakeHead: '#cf7917',
-                    snakeBody: '#bab63f',
-                    snakeBorder: '.25vmin solid black',
-                    snakeBoost: '25vmin solid yellow',
+                    snakeHead: '#1a70ff',
+                    snakeBody: '#00ccff',
+                    snakeBorder: '#000',
+                    snakeBoost: '#faf11b',
                     navColor: '#2d9de6',
                     boardColor: '#eaeaea',
                     sideColor: '#fff',
@@ -408,18 +446,43 @@ function removeErrorMessage() {
 /**
  *  Game Settings
  */
-const snakeFragment = document.querySelectorAll('.snake')
+ 
+settingLink.addEventListener('click',()=>{
+  settingsBackdrop.style.display = 'grid'
+})
 
-if (userData) {
-    // body color
-    snakeFragment.forEach((fragment) => {
-        fragment.style.backgroundColor = userData.snakeBody
-        fragment.style.border = userData.snakeBorder
-        fragment.style.borderRadius = userData.snakeShape
+closeSetting.addEventListener('click',()=>{
+  settingsBackdrop.style.display = 'none'
+  setColor()
+})
+
+
+colorSettingForm.addEventListener('submit', (e)=>{
+  e.preventDefault()
+  if(!currentUser) return
+  const docRef = doc(db, 'scores', userData.id)
+  updateDoc(docRef, {
+    snakeShape: '8px',
+    snakeHead: snakeHeadColor.value,
+    snakeBody: snakeBodyColor.value,
+    snakeBorder: snakeBorderColor.value,
+    snakeBoost: snakeBoostColor.value,
+    navColor: navColor.value,
+    boardColor: boardColor.value,
+    sideColor: '#fff',
+    keyColor: keyColor.value,
+    keyColorBackground: '#fff',
+    
+  })
+  .then(()=> {
+    Swal.fire('Success update settings').then(()=>{
+      goHome()
     })
-    // head color
-    snakeFragment[0].style.backgroundColor = userData.snakeHead
-}
+  })
+  .catch((err)=>{
+    console.log(err.message)
+  })
+})
 
 /**
  *  end Game Settings
@@ -428,13 +491,6 @@ if (userData) {
 /**
  *  Chat settings
  */
-const chat = document.querySelector('.chat')
-const chatButton = document.querySelector('.chat-box')
-const chatClose = document.querySelector('#chat .close')
-const chatBox = document.getElementById('chat')
-const chatForm = document.querySelector('.chat-input')
-const chatContent = document.querySelector('.chat-content')
-
 chatButton.addEventListener('click', () => {
     if (currentUser) {
         chatBox.style.display = 'grid'
@@ -626,8 +682,15 @@ window.addEventListener('click', (e) => {
         if (clickedElement == chat) {
             return
         }
+        if (clickedElement == colorSettingForm) {
+            return
+        }
         clickedElement = clickedElement.parentNode
     } while (clickedElement)
     navUl.classList.remove('toggle-nav')
     chatBox.style.display = 'none'
+    settingsBackdrop.style.display = 'none'
+    if(userData && currentUser) {
+      setColor()
+    }
 })
