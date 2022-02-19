@@ -340,7 +340,7 @@ signupForm.addEventListener('submit', (e) => {
                     snakeShape: '8px',
                     snakeHead: '#cf7917',
                     snakeBody: '#bab63f',
-                    snakeBorder: '.25vmin solid balck',
+                    snakeBorder: '.25vmin solid black',
                     snakeBoost: '25vmin solid yellow',
                     navColor: '#2d9de6',
                     boardColor: '#eaeaea',

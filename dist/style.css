@@ -37,12 +37,12 @@ a:hover {
 }
 
 .loader {
-  position: fixed;
-  inset: 0;
-  background-color: #fff;
-  display: grid;
-  place-items: center;
-  z-index:999;
+    position: fixed;
+    inset: 0;
+    background-color: #fff;
+    display: grid;
+    place-items: center;
+    z-index: 999;
 }
 nav {
     background-color: var(--nav-blue);
@@ -83,89 +83,94 @@ sidebar table {
 }
 
 .chat-box {
-  position: fixed;
-  bottom: 20px;
-  right: 20px;
-  z-index: 30;
-  color: #fff;
-  width: 30px;
-  height: 30px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  background-color: var(--nav-blue);
-  cursor: pointer;
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    z-index: 30;
+    color: #fff;
+    width: 30px;
+    height: 30px;
+    border-radius: 50%;
+    display: grid;
+    place-items: center;
+    background-color: var(--nav-blue);
+    cursor: pointer;
 }
 
 .chat {
-  position: relative;
-  width: 95vw;
-  height: 60vh;
-  background-color: #fff;
-  border-radius: 5px;
-  padding: 10px;
+    position: relative;
+    max-width: 1600px;
+    height: 80vh;
+    background-color: var(--nav-dark);
+    border-radius: 10px;
+    padding: 10px;
+    margin: 20px;
+    color: #fff;
 }
 .chat-content {
-  display: flex;
-  flex-direction: column-reverse;
-  height: 60%;
-  margin-bottom: 10px;
-  border-radius: 3px;
-  overflow: auto;
+    display: flex;
+    flex-direction: column-reverse;
+    height: 80%;
+    margin-bottom: 10px;
+    border-radius: 3px;
+    overflow: auto;
 }
 .info {
-  margin:5px;
+    margin: 5px;
 }
-.chat-input  {
-  display: flex;
-  justify-content: space-between;
+.chat-input {
+    display: flex;
+    justify-content: space-between;
+    position: absolute;
+    bottom: 10px;
+    left: 5px;
+    right: 5px;
 }
 
 .chat-input input {
-  height: 30px;
-  width: 80%;
-  border: 1px solid var(--nav-blue);
-  border-radius: 5px;
-  background-color: #fff;
+    height: 30px;
+    width: 80%;
+    border: 1px solid var(--nav-blue);
+    border-radius: 5px;
+    background-color: lightblue;
 }
 .chat-input button {
-  height: 30px;
-  width: 50px;
-  border-radius: 8px;
-  background-color: var(--soft-green);
-  border: none;
-  
+    height: 30px;
+    width: 50px;
+    border-radius: 8px;
+    background-color: var(--soft-green);
+    border: none;
 }
 .message {
-  max-width: 80%;
-  margin: 10px;
-  padding: 3px;
-  background-color: #fff;
-  text-align: left;
-  border-radius: 5px;
-  box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
+    max-width: 80%;
+    margin: 10px;
+    padding: 3px;
+    background-color: rgb(71, 71, 71);
+    text-align: left;
+    border-radius: 5px;
+    box-shadow: 2px 2px 2px rgba(0, 0, 0, 0.25);
 }
 
 .m-right {
-  align-self: flex-end;
-  min-width: 50%;
+    align-self: flex-end;
+    min-width: 50%;
 }
 
-.message p:nth-child(1){
-  font-size: 14px;
-  font-weight: bold;
-  margin-bottom: 5px;
+.message p:nth-child(1) {
+    font-size: 14px;
+    font-weight: bold;
+    margin-bottom: 5px;
 }
-.message p:nth-child(2){
-  font-size: 14px;
+.message p:nth-child(2) {
+    font-size: 14px;
 }
-.message p:nth-child(3){
-  font-size: 10px;
-  text-align: right;
+.message p:nth-child(3) {
+    font-size: 10px;
+    text-align: right;
 }
 .table-box {
-  max-height: 250px;
-  overflow: auto;
+    max-height: 250px;
+    overflow: auto;
 }
 .col,
 .col-score {
@@ -209,6 +214,7 @@ nav h1 {
 .nav-ul li {
     display: block;
     margin-bottom: 20px;
+    font-size: 30px;
 }
 
 .toggle-nav {
@@ -282,7 +288,8 @@ nav span {
 }
 
 #login,
-#signup, #chat {
+#signup,
+#chat {
     display: none;
 }
 
@@ -293,7 +300,7 @@ nav span {
 }
 
 #game-board {
-    background-color: #eaeaea;
+    background-color: #cfcfcf;
     display: grid;
     width: 100%;
     height: 100%;
@@ -302,7 +309,7 @@ nav span {
 }
 
 #game-board div:first-child {
-    background-color: #0072e4;
+    background-color: #e45b00;
 }
 
 #point {
@@ -338,7 +345,7 @@ nav span {
 
 #keyboard {
     position: fixed;
-    inset: auto auto 60px auto;
+    inset: auto auto 30px auto;
     text-align: center;
     width: 100vw;
 }
