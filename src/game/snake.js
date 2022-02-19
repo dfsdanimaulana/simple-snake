@@ -1,6 +1,7 @@
 import { getInputDirection } from './input.js'
 import { config } from './config.js'
 import { getSnakeBorder } from './input.js'
+import { getUser } from '../index.js'
 
 const snakeBody = [{ x: 11, y: 11 }]
 let newSegment = 0
@@ -16,23 +17,26 @@ export function update() {
     snakeBody[0].y += inputDrection.y
 }
 
-export function draw(
-    gameBoard,
-    body = '#79e4ff',
-    head = '#0e91ff',
-    border = '.25vmin solid black',
-) {
+export function draw(gameBoard) {
+    
+    let data = getUser()
     snakeBody.forEach((segment) => {
         const snakeElement = document.createElement('div')
         snakeElement.style.gridRowStart = segment.y
         snakeElement.style.gridColumnStart = segment.x
         snakeElement.classList.add('snake')
         snakeElement.style.backgroundColor = config.SNAKE_COLOR.body
+        if(data) {
+          snakeElement.style.backgroundColor = data.snakeBody
+        }
         snakeElement.style.border = getSnakeBorder()
         gameBoard.appendChild(snakeElement)
     })
     const snakeHead = document.querySelectorAll('.snake')
     snakeHead[0].style.backgroundColor = config.SNAKE_COLOR.head
+    if(data){
+      snakeHead[0].style.backgroundColor = data.snakeHead
+    }
 }
 
 export function expandSnake(amount) {
