@@ -18,7 +18,6 @@ import {
     orderBy,
     doc,
     updateDoc,
-    limit,
 } from 'firebase/firestore'
 
 import {
@@ -60,8 +59,8 @@ const bestScore = document.querySelector('#best-score')
 const sidebar = document.querySelector('sidebar')
 const loader = document.querySelector('.loader')
 const multi = document.querySelector('#multiplayer')
-multi.addEventListener('click',()=>{
-  Swal.fire('Coming Soon...')
+multi.addEventListener('click', () => {
+    Swal.fire('Coming Soon...')
 })
 /**
  * Game logic
@@ -79,7 +78,7 @@ window.requestAnimationFrame(main)
 function main(currentTime) {
     if (gameOver) {
         // ask user to login/signup if not yet
-        if (currentUser && username) {
+        if (currentUser && userData) {
             //update score in user firestore
             const newScore = updatePoint()
             if (userData.score > newScore) {
@@ -87,28 +86,26 @@ function main(currentTime) {
                     'Game Over!',
                     "Don't give up and try again 😊",
                     'error',
-                ).then(() => {  
+                ).then(() => {
                     goHome()
                 })
             } else {
-            const docRef = doc(db, 'scores', userData.id)
-            updateDoc(docRef, {
-                score: newScore,
-            }).then(() => {
-                Swal.fire(
-                    'Game Over!',
-                    "You have new game record 😊",
-                    'success',
-                ).then(() => {
-                  
-                    goHome()
-                
+                const docRef = doc(db, 'scores', userData.id)
+                updateDoc(docRef, {
+                    score: newScore,
                 })
-                
-            })
-            .catch((err) => {
-                console.log(err.message)
-            })
+                    .then(() => {
+                        Swal.fire(
+                            'Game Over!',
+                            'You have new game record 😊',
+                            'success',
+                        ).then(() => {
+                            goHome()
+                        })
+                    })
+                    .catch((err) => {
+                        console.log(err.message)
+                    })
             }
         } else {
             Swal.fire({
@@ -204,8 +201,7 @@ onSnapshot(
 
         if (score.length > 0) {
             score.forEach((s, i) => {
-                textNode += 
-                `<tr>
+                textNode += `<tr>
                   <td class="col">${i + 1}</td>
                   <td>${s.username}</td>
                   <td class="col-score">${s.score}</td>
@@ -231,30 +227,13 @@ onSnapshot(
         <th>Name</th>
         <th>Score</th>
       </tr>` + textNode
-      
-      // set snake and apple attrbutefrom user data
+
+        // set snake and apple attrbutefrom user data
     },
     (err) => {
         console.log(err.message)
     },
 )
-
-function updateUserScore() {
-    if (currentUser && userData) {
-        const newScore = updatePoint()
-        if (userData.score > newScore) return
-        const docRef = doc(db, 'scores', userData.id)
-        updateDoc(docRef, {
-            score: newScore,
-        })
-            .then(() => {
-                console.log('score updated')
-            })
-            .catch((err) => {
-                console.log(err.message)
-            })
-    }
-}
 
 /**
  * end score logic
@@ -269,7 +248,6 @@ onAuthStateChanged(
     auth,
     (user) => {
         if (user) {
-            sessionStorage.setItem('currentUser', JSON.stringify(user))
             currentUser = user
             // create user displayname list
             const nameListNav = document.createElement('li')
@@ -434,19 +412,19 @@ function removeErrorMessage() {
 /**
  *  Game Settings
  */
- const snakeFragment = document.querySelectorAll('.snake')
- 
- if(userData){
-   // body color
-   snakeFragment.forEach((fragment)=>{
-     fragment.style.backgroundColor = userData.snakeBody
-     fragment.style.border = userData.snakeBorder
-     fragment.style.borderRadius = userData.snakeShape
-   })
-   // head color
-   snakeFragment[0].style.backgroundColor = userData.snakeHead
- }
- 
+const snakeFragment = document.querySelectorAll('.snake')
+
+if (userData) {
+    // body color
+    snakeFragment.forEach((fragment) => {
+        fragment.style.backgroundColor = userData.snakeBody
+        fragment.style.border = userData.snakeBorder
+        fragment.style.borderRadius = userData.snakeShape
+    })
+    // head color
+    snakeFragment[0].style.backgroundColor = userData.snakeHead
+}
+
 /**
  *  end Game Settings
  */
@@ -454,97 +432,100 @@ function removeErrorMessage() {
 /**
  *  Chat settings
  */
- const chat = document.querySelector('.chat')
- const chatButton = document.querySelector('.chat-box')
- const chatClose = document.querySelector('#chat .close')
- const chatBox = document.getElementById('chat')
- const chatForm = document.querySelector('.chat-input')
- const chatContent = document.querySelector('.chat-content')
- 
- chatButton.addEventListener('click', ()=>{
-   if(currentUser){
-      chatBox.style.display = 'grid'
-   } else {
-      Swal.fire({
-          text: 'Please login first',
-          showCancelButton: true,
-          confirmButtonColor: '#3085d6',
-          cancelButtonColor: '#d33',
-          confirmButtonText: 'Login/signup',
-          cancelButtonText: 'No, Thanks',
-      }).then((result) => {
-          if (result.isConfirmed) {
-              openForm('login')
-          }
-      })
-   }
- })
- chatClose.addEventListener('click', ()=>{
-   chatBox.style.display = 'none'
- })
- 
- // send chat message
- const colChatRef = collection(db,'chats')
- 
- chatForm.addEventListener('submit',(e)=>{
-   e.preventDefault()
-   
-   addDoc(colChatRef, {
-     msg: chatForm.msg.value,
-     uid: currentUser.uid,
-     username: currentUser.displayName,
-     createdAt: serverTimestamp()
-   })
-   .then((res)=>{
-      chatForm.reset()
-   })
-   .catch((err)=>{
-     console.log(err.message)
-   })
- })
- 
- 
- // get all chat document
- onSnapshot(query(colChatRef, orderBy('createdAt','desc')), (snapshot)=> {
-   let chats = []
-    snapshot.docs.forEach((doc) => {
-        chats.push({ ...doc.data(), id: doc.id })
-    },(err)=>{
-      console.log(err.message)
+const chat = document.querySelector('.chat')
+const chatButton = document.querySelector('.chat-box')
+const chatClose = document.querySelector('#chat .close')
+const chatBox = document.getElementById('chat')
+const chatForm = document.querySelector('.chat-input')
+const chatContent = document.querySelector('.chat-content')
+
+chatButton.addEventListener('click', () => {
+    if (currentUser) {
+        chatBox.style.display = 'grid'
+    } else {
+        Swal.fire({
+            text: 'Please login first',
+            showCancelButton: true,
+            confirmButtonColor: '#3085d6',
+            cancelButtonColor: '#d33',
+            confirmButtonText: 'Login/signup',
+            cancelButtonText: 'No, Thanks',
+        }).then((result) => {
+            if (result.isConfirmed) {
+                openForm('login')
+            }
+        })
+    }
+})
+chatClose.addEventListener('click', () => {
+    chatBox.style.display = 'none'
+})
+
+// send chat message
+const colChatRef = collection(db, 'chats')
+
+chatForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+
+    addDoc(colChatRef, {
+        msg: chatForm.msg.value,
+        uid: currentUser.uid,
+        username: currentUser.displayName,
+        createdAt: serverTimestamp(),
     })
-    if(chats.length > 0){
+        .then((res) => {
+            chatForm.reset()
+        })
+        .catch((err) => {
+            console.log(err.message)
+        })
+})
+
+// get all chat document
+onSnapshot(query(colChatRef, orderBy('createdAt', 'desc')), (snapshot) => {
+    let chats = []
+    snapshot.docs.forEach(
+        (doc) => {
+            chats.push({ ...doc.data(), id: doc.id })
+        },
+        (err) => {
+            console.log(err.message)
+        },
+    )
+    if (chats.length > 0) {
         let textNode = ''
-        chats.map((chat)=>{
-          if(currentUser){
-            if(chat.uid === currentUser.uid){
-              textNode += 
-              `<div class="message m-right" >
+        chats.map((chat) => {
+            if (currentUser) {
+                if (chat.uid === currentUser.uid) {
+                    textNode += `<div class="message m-right" >
                 <p>you</p>
                 <p>${chat.msg}</p>
-                <p>${formatDistanceToNow(chat.createdAt.toDate(), { addSuffix:true })}</p>
+                <p>${formatDistanceToNow(chat.createdAt.toDate(), {
+                    addSuffix: true,
+                })}</p>
               </div>`
-            } else {
-              textNode += 
-              `<div class="message" >
+                } else {
+                    textNode += `<div class="message" >
                 <p>${chat.username}</p>
                 <p>${chat.msg}</p>
-                <p>${formatDistanceToNow(chat.createdAt.toDate(), { addSuffix:true })}</p>
+                <p>${formatDistanceToNow(chat.createdAt.toDate(), {
+                    addSuffix: true,
+                })}</p>
               </div>`
-              
+                }
             }
-          }
         })
         chatContent.innerHTML = textNode
     }
- }) 
+})
 /**
  *  End Chat settings
  */
- 
+
 /**
  * DOM interaction
  */
- 
+
 scoreboard.addEventListener('click', () => {
     Swal.fire({
         title: '<strong>Scoreboard</strong>',
@@ -559,7 +540,6 @@ scoreboard.addEventListener('click', () => {
 navButton.addEventListener('click', () => {
     navUl.classList.add('toggle-nav')
 })
-
 
 /**
  * Handle open/close login and signup form

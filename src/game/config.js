@@ -13,7 +13,7 @@ export const config = {
   SNAKE_COLOR: {
     head: '#0e91ff',
     body: '#79e4ff',
-    border: '.25vmin solid balck',
+    border: '.25vmin solid black',
     boost: '.25vmin solid yellow'
   },
   GAME_COLOR: {
