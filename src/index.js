@@ -58,10 +58,6 @@ const signupForm = document.querySelector('#signup-form')
 const bestScore = document.querySelector('#best-score')
 const sidebar = document.querySelector('sidebar')
 const loader = document.querySelector('.loader')
-const multi = document.querySelector('#multiplayer')
-multi.addEventListener('click', () => {
-    Swal.fire('Coming Soon...')
-})
 /**
  * Game logic
  */
