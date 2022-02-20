@@ -73,6 +73,7 @@ const snakeBodyColor = document.getElementById('snakeBodyColor')
 const snakeBorderColor = document.getElementById('snakeBorderColor')
 const snakeBoostColor = document.getElementById('snakeBoostColor')
 const boardColor = document.getElementById('boardColor')
+const boardBorderColor = document.getElementById('boardBorderColor')
 const keyColor = document.getElementById('keyColor')
 const navColor = document.getElementById('navColor')
 const navbar = document.querySelector('nav')
@@ -197,6 +198,7 @@ function setColor() {
     navColor.value = userData.navColor
     boardColor.value = userData.boardColor
     keyColor.value = userData.keyColor
+    boardBorderColor.value = userData.sideColor
 }
 
 const colRef = collection(db, 'scores')
@@ -257,6 +259,7 @@ onSnapshot(
         if (userData) {
             navbar.style.backgroundColor = userData.navColor
             gameBoard.style.backgroundColor = userData.boardColor
+            gameBoard.style.border = `5px solid ${userData.sideColor}`
             keys.forEach((key) => {
                 key.style.backgroundColor = userData.keyColor
             })
@@ -357,7 +360,7 @@ signupForm.addEventListener('submit', (e) => {
                     snakeBoost: '#faf11b',
                     navColor: '#2d9de6',
                     boardColor: '#eaeaea',
-                    sideColor: '#fff',
+                    sideColor: '#000',
                     keyColor: '#3b3b3b',
                     keyColorBackground: '#fff',
                 })
@@ -474,7 +477,7 @@ colorSettingForm.addEventListener('submit', (e) => {
         snakeBoost: snakeBoostColor.value,
         navColor: navColor.value,
         boardColor: boardColor.value,
-        sideColor: '#fff',
+        sideColor: boardBorderColor.value,
         keyColor: keyColor.value,
         keyColorBackground: '#fff',
     })
