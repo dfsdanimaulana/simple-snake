@@ -1,3 +1,4 @@
+/* eslint-disable no-undef */
 // firebase import
 import { auth, db } from './firebase.js'
 import formatDistanceToNow from 'date-fns/formatDistanceToNow'
@@ -218,8 +219,6 @@ onSnapshot(
             })[0]
             bestScore.innerHTML = 'Best : ' + userData.score
             setColor()
-            
-            
         }
 
         let textNode = ''
@@ -253,23 +252,23 @@ onSnapshot(
         <th>Name</th>
         <th>Score</th>
       </tr>` + textNode
-      
-      // set color
-      if(userData){
-        navbar.style.backgroundColor = userData.navColor
-        gameBoard.style.backgroundColor = userData.boardColor
-        keys.forEach((key)=>{
-          key.style.backgroundColor = userData.keyColor
-        })
-      }
+
+        // set color
+        if (userData) {
+            navbar.style.backgroundColor = userData.navColor
+            gameBoard.style.backgroundColor = userData.boardColor
+            keys.forEach((key) => {
+                key.style.backgroundColor = userData.keyColor
+            })
+        }
     },
     (err) => {
         console.log(err.message)
     },
 )
 
-export function getUser(){
-  return userData
+export function getUser() {
+    return userData
 }
 /**
  * end score logic
@@ -285,7 +284,7 @@ onAuthStateChanged(
     (user) => {
         if (user) {
             currentUser = user
-            // create user displayname list
+            // create user display name list
             const nameListNav = document.createElement('li')
             nameListNav.classList.add('display-name')
             nameListNav.innerHTML = `<h3>${user.displayName}</h3><hr/>`
@@ -448,46 +447,44 @@ function removeErrorMessage() {
 /**
  *  Game Settings
  */
- 
-settingLink.addEventListener('click',()=>{
-  settingsBackdrop.style.display = 'grid'
+
+settingLink.addEventListener('click', () => {
+    settingsBackdrop.style.display = 'grid'
 })
 
-settingLinkSide.addEventListener('click',()=>{
-  settingsBackdrop.style.display = 'grid'
+settingLinkSide.addEventListener('click', () => {
+    settingsBackdrop.style.display = 'grid'
 })
 
-closeSetting.addEventListener('click',()=>{
-  settingsBackdrop.style.display = 'none'
-  setColor()
+closeSetting.addEventListener('click', () => {
+    settingsBackdrop.style.display = 'none'
+    setColor()
 })
 
-
-colorSettingForm.addEventListener('submit', (e)=>{
-  e.preventDefault()
-  if(!currentUser) return
-  const docRef = doc(db, 'scores', userData.id)
-  updateDoc(docRef, {
-    snakeShape: '8px',
-    snakeHead: snakeHeadColor.value,
-    snakeBody: snakeBodyColor.value,
-    snakeBorder: snakeBorderColor.value,
-    snakeBoost: snakeBoostColor.value,
-    navColor: navColor.value,
-    boardColor: boardColor.value,
-    sideColor: '#fff',
-    keyColor: keyColor.value,
-    keyColorBackground: '#fff',
-    
-  })
-  .then(()=> {
-    Swal.fire({ icon:'success',text:'Update success'}).then(()=>{
-      goHome()
+colorSettingForm.addEventListener('submit', (e) => {
+    e.preventDefault()
+    if (!currentUser) return
+    const docRef = doc(db, 'scores', userData.id)
+    updateDoc(docRef, {
+        snakeShape: '8px',
+        snakeHead: snakeHeadColor.value,
+        snakeBody: snakeBodyColor.value,
+        snakeBorder: snakeBorderColor.value,
+        snakeBoost: snakeBoostColor.value,
+        navColor: navColor.value,
+        boardColor: boardColor.value,
+        sideColor: '#fff',
+        keyColor: keyColor.value,
+        keyColorBackground: '#fff',
     })
-  })
-  .catch((err)=>{
-    console.log(err.message)
-  })
+        .then(() => {
+            Swal.fire({ icon: 'success', text: 'Update success' }).then(() => {
+                goHome()
+            })
+        })
+        .catch((err) => {
+            console.log(err.message)
+        })
 })
 
 /**
@@ -532,7 +529,7 @@ chatForm.addEventListener('submit', (e) => {
         username: currentUser.displayName,
         createdAt: serverTimestamp(),
     })
-        .then((res) => {
+        .then(() => {
             chatForm.reset()
             chatForm.msg.focus()
         })
@@ -699,7 +696,7 @@ window.addEventListener('click', (e) => {
     navUl.classList.remove('toggle-nav')
     chatBox.style.display = 'none'
     settingsBackdrop.style.display = 'none'
-    if(userData && currentUser) {
-      setColor()
+    if (userData && currentUser) {
+        setColor()
     }
 })
