@@ -463,7 +463,8 @@ closeSetting.addEventListener('click', () => {
 
 colorSettingForm.addEventListener('submit', (e) => {
     e.preventDefault()
-    if (!currentUser) return
+    const btn = document.querySelector('#settings-form button')
+    btn.innerHTML = 'updating...'
     const docRef = doc(db, 'scores', userData.id)
     updateDoc(docRef, {
         snakeShape: '8px',
@@ -479,6 +480,8 @@ colorSettingForm.addEventListener('submit', (e) => {
     })
         .then(() => {
             Swal.fire({ icon: 'success', text: 'Update success' }).then(() => {
+                btn.innerHTML = 'Save'
+
                 goHome()
             })
         })

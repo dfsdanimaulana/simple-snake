@@ -72,7 +72,7 @@ export function boostSpeed() {
     snakeSpeed = 10
     snakeBorder = config.SNAKE_COLOR.boost
     if (data) {
-        snakeBorder = `.25vmin solid ${data.snakeBoost}`
+        snakeBorder = `.30vmin solid ${data.snakeBoost}`
     }
     setTimeout(() => {
         snakeSpeed = config.SNAKE_SPEED

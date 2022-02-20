@@ -14,7 +14,7 @@ export const config = {
     head: '#0e91ff',
     body: '#79e4ff',
     border: '.25vmin solid black',
-    boost: '.25vmin solid yellow'
+    boost: '.30vmin solid yellow'
   },
   GAME_COLOR: {
     nav:'',
