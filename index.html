@@ -1,256 +1,214 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <meta http-equiv="X-UA-Compatible" content="ie=edge" />
-        <title>Snake Game by @dnm17_</title>
-        <meta
-            name="description"
-            content="Simple Snake Game created by @dnm17_"
-        />
-        <link rel="shortcut icon" href="dist/favicon.png" />
-        <link
-            rel="stylesheet"
-            href="dist/style.css"
-            type="text/css"
-            media="all"
-        />
-        <!-- sweet alert -->
-        <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
-        <!-- Font awesome -->
-        <script
-            src="https://kit.fontawesome.com/7a3f1d0e46.js"
-            crossorigin="anonymous"
-        ></script>
-        <script src="dist/bundle.js" defer></script>
-    </head>
-    <body>
-        <nav>
-            <h1 class="header-tag">Simple Snake</h1>
-            <ul class="nav-ul">
-                <li id="auth-link">Login/Register</li>
-                <li id="setting">Settings</li>
-                <li id="scoreboard">Scoreboard</li>
-                <li>
-                    <a href="https://twice-memory.herokuapp.com" target="_blank"
-                        >Card Game</a
-                    >
-                </li>
-                <li>
-                    <a href="https://instagram.com/dnm17_" target="_blank"
-                        >Contact me</a
-                    >
-                </li>
-                <li id="logout-link">Logout</li>
-            </ul>
-            <span class="nav-button">
-                <i class="fas fa-bars"></i>
-            </span>
-        </nav>
-        <div id="board">
-            <div id="game-board"></div>
-            <div id="point">Score : <span id="point-value"></span></div>
-            <div id="best-score"></div>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Snake Game by @dnm17_</title>
+    <meta name="description" content="Simple Snake Game created by @dnm17_" />
+    <link rel="shortcut icon" href="dist/favicon.png" />
+    <link rel="stylesheet" href="dist/style.css" type="text/css" media="all" />
+    <!-- Font awesome -->
+    <script
+      src="https://kit.fontawesome.com/7a3f1d0e46.js"
+      crossorigin="anonymous"
+    ></script>
+    <script src="dist/bundle.js" defer></script>
+  </head>
+  <body>
+    <nav>
+      <h1 class="header-tag">Simple Snake 2</h1>
+      <ul class="nav-ul">
+        <li id="auth-link">Login/Register</li>
+        <li id="setting">Settings</li>
+        <li id="scoreboard">Scoreboard</li>
+        <li>
+          <a href="https://twice-memory.herokuapp.com" target="_blank"
+            >Card Game</a
+          >
+        </li>
+        <li>
+          <a href="https://instagram.com/dnm17_" target="_blank">Contact me</a>
+        </li>
+        <li id="logout-link">Logout</li>
+      </ul>
+      <span class="nav-button">
+        <i class="fas fa-bars"></i>
+      </span>
+    </nav>
+    <div id="board">
+      <div id="game-board"></div>
+      <div id="point">Score : <span id="point-value"></span></div>
+      <div id="best-score"></div>
+    </div>
+    <sidebar>
+      <h1 class="header-tag">Simple Snake</h1>
+      <div id="scoreboard-box">
+        <h3>Scoreboard</h3>
+        <div class="table-box">
+          <table></table>
         </div>
-        <sidebar>
-            <h1 class="header-tag">Simple Snake</h1>
-            <div id="scoreboard-box">
-                <h3>Scoreboard</h3>
-                <div class="table-box">
-                    <table></table>
-                </div>
-                <ul class="side-ul">
-                    <li id="auth-link-side">Login/Register</li>
-                    <li id="setting-side">Settings</li>
-                    <li>
-                        <a
-                            href="https://twice-memory.herokuapp.com"
-                            target="_blank"
-                            >Card Game</a
-                        >
-                    </li>
-                    <li>
-                        <a href="https://instagram.com/dnm17_" target="_blank"
-                            >Contact me</a
-                        >
-                    </li>
-                    <li id="logout-link-side">Logout</li>
-                </ul>
-            </div>
-        </sidebar>
-        <div id="keyboard">
-            <button class="key" id="up">
-                <i class="fas fa-arrow-up"></i>
-            </button>
-            <div class="mid">
-                <button class="key" id="left">
-                    <i class="fas fa-arrow-left"></i>
-                </button>
-                <button class="key" id="boost">boost</button>
-                <button class="key" id="right">
-                    <i class="fas fa-arrow-right"></i>
-                </button>
-            </div>
-            <button class="key" id="down">
-                <i class="fas fa-arrow-down"></i>
-            </button>
+        <ul class="side-ul">
+          <li id="auth-link-side">Login/Register</li>
+          <li id="setting-side">Settings</li>
+          <li>
+            <a href="https://twice-memory.herokuapp.com" target="_blank"
+              >Card Game</a
+            >
+          </li>
+          <li>
+            <a href="https://instagram.com/dnm17_" target="_blank"
+              >Contact me</a
+            >
+          </li>
+          <li id="logout-link-side">Logout</li>
+        </ul>
+      </div>
+    </sidebar>
+    <div id="keyboard">
+      <button class="key" id="up">
+        <i class="fas fa-arrow-up"></i>
+      </button>
+      <div class="mid">
+        <button class="key" id="left">
+          <i class="fas fa-arrow-left"></i>
+        </button>
+        <button class="key" id="boost">boost</button>
+        <button class="key" id="right">
+          <i class="fas fa-arrow-right"></i>
+        </button>
+      </div>
+      <button class="key" id="down">
+        <i class="fas fa-arrow-down"></i>
+      </button>
+    </div>
+    <div class="form-backdrop" id="signup">
+      <form class="auth-form" id="signup-form">
+        <span class="close">x</span>
+        <h1>Signup</h1>
+        <div class="form-input">
+          <label for="username">Username:</label>
+          <input
+            type="text"
+            name="username"
+            id="username"
+            required
+            autocomplete="off"
+          />
         </div>
-        <div class="form-backdrop" id="signup">
-            <form class="auth-form" id="signup-form">
-                <span class="close">x</span>
-                <h1>Signup</h1>
-                <div class="form-input">
-                    <label for="username">Username:</label>
-                    <input
-                        type="text"
-                        name="username"
-                        id="username"
-                        required
-                        autocomplete="off"
-                    />
-                </div>
-                <div class="form-input">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email_sign" required />
-                </div>
-                <div class="form-input">
-                    <label for="password">Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password_sign"
-                        value=""
-                        required
-                    />
-                </div>
-                <button type="submit" class="btn">Signup</button>
-                <p>
-                    Already have an account?
-                    <span id="login-link">login here</span>
-                </p>
-            </form>
+        <div class="form-input">
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email_sign" required />
         </div>
+        <div class="form-input">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password_sign"
+            value=""
+            required
+          />
+        </div>
+        <button type="submit" class="btn">Signup</button>
+        <p>
+          Already have an account?
+          <span id="login-link">login here</span>
+        </p>
+      </form>
+    </div>
 
-        <div class="form-backdrop" id="login">
-            <form class="auth-form" id="login-form">
-                <span class="close">x</span>
-                <h1>Login</h1>
-                <div class="form-input">
-                    <label for="email">Email:</label>
-                    <input type="email" name="email" id="email" required />
-                </div>
-                <div class="form-input">
-                    <label for="password">Password:</label>
-                    <input
-                        type="password"
-                        name="password"
-                        id="password"
-                        value=""
-                        required
-                    />
-                </div>
-                <button type="submit" class="btn">Login</button>
-                <p>New user? <span id="signup-link">Signup here</span></p>
-            </form>
+    <div class="form-backdrop" id="login">
+      <form class="auth-form" id="login-form">
+        <span class="close">x</span>
+        <h1>Login</h1>
+        <div class="form-input">
+          <label for="email">Email:</label>
+          <input type="email" name="email" id="email" required />
         </div>
-        <p class="space">[SPACE] : Boost</p>
-        <div class="chat-box">
-            <i class="fas fa-comment"></i>
+        <div class="form-input">
+          <label for="password">Password:</label>
+          <input
+            type="password"
+            name="password"
+            id="password"
+            value=""
+            required
+          />
         </div>
-        <div class="form-backdrop" id="chat">
-            <div class="chat">
-                <span class="close">x</span>
-                <h1>Chat Room</h1>
-                <p class="info">
-                    Please tell me if you find some bug. Thanks... 😁
-                </p>
-                <div class="chat-content"></div>
-                <form class="chat-input">
-                    <input
-                        type="text"
-                        name="msg"
-                        id="msg"
-                        required
-                        autocomplete="off"
-                    />
-                    <button type="submit">Send</button>
-                </form>
+        <button type="submit" class="btn">Login</button>
+        <p>New user? <span id="signup-link">Signup here</span></p>
+      </form>
+    </div>
+    <p class="space">[SPACE] : Boost</p>
+    <div class="chat-box">
+      <i class="fas fa-comment"></i>
+    </div>
+    <div class="form-backdrop" id="chat">
+      <div class="chat">
+        <span class="close">x</span>
+        <h1>Chat Room</h1>
+        <p class="info">Please tell me if you find some bug. Thanks... 😁</p>
+        <div class="chat-content"></div>
+        <form class="chat-input">
+          <input type="text" name="msg" id="msg" required autocomplete="off" />
+          <button type="submit">Send</button>
+        </form>
+      </div>
+    </div>
+    <div class="form-backdrop" id="settings-backdrop">
+      <div class="settings-box">
+        <h2>Settings</h2>
+        <form id="settings-form" class="auth-form">
+          <span class="close">x</span>
+          <div class="input-box">
+            <div class="input-color">
+              <label for="snakeHeadColor">Snake Head Color</label>
+              <input type="color" name="snakeHeadColor" id="snakeHeadColor" />
             </div>
-        </div>
-        <div class="form-backdrop" id="settings-backdrop">
-            <div class="settings-box">
-                <h2>Settings</h2>
-                <form id="settings-form" class="auth-form">
-                    <span class="close">x</span>
-                    <div class="input-box">
-                        <div class="input-color">
-                            <label for="snakeHeadColor">Snake Head Color</label>
-                            <input
-                                type="color"
-                                name="snakeHeadColor"
-                                id="snakeHeadColor"
-                            />
-                        </div>
-                        <div class="input-color">
-                            <label for="snakeBodyColor">Snake Body Color</label>
-                            <input
-                                type="color"
-                                name="snakeBodyColor"
-                                id="snakeBodyColor"
-                            />
-                        </div>
-                        <div class="input-color">
-                            <label for="snakeBorderColor"
-                                >Snake Border Color</label
-                            >
-                            <input
-                                type="color"
-                                name="snakeBorderColor"
-                                id="snakeBorderColor"
-                            />
-                        </div>
-                        <div class="input-color">
-                            <label for="snakeBoostColor">Snake Boost Color</label>
-                            <input
-                                type="color"
-                                name="snakeBoostColor"
-                                id="snakeBoostColor"
-                            />
-                        </div>
-                        <div class="input-color">
-                            <label for="boardColor">Board Color</label>
-                            <input
-                                type="color"
-                                name="boardColor"
-                                id="boardColor"
-                            />
-                        </div>
-                        <div class="input-color">
-                            <label for="boardBorderColor"
-                                >Board Border Color</label
-                            >
-                            <input
-                                type="color"
-                                name="boardBorderColor"
-                                id="boardBorderColor"
-                            />
-                        </div>
-                        <div class="input-color">
-                            <label for="navColor">Navbar Color</label>
-                            <input type="color" name="navColor" id="navColor" />
-                        </div>
-                        <div class="input-color">
-                            <label for="keyColor">Keypad Color</label>
-                            <input type="color" name="keyColor" id="keyColor" />
-                        </div>
-                    </div>
-                    <button type="submit" class="btn">Save</button>
-                </form>
+            <div class="input-color">
+              <label for="snakeBodyColor">Snake Body Color</label>
+              <input type="color" name="snakeBodyColor" id="snakeBodyColor" />
             </div>
-        </div>
-        <div class="loader">
-            <div>Loading...</div>
-        </div>
-    </body>
+            <div class="input-color">
+              <label for="snakeBorderColor">Snake Border Color</label>
+              <input
+                type="color"
+                name="snakeBorderColor"
+                id="snakeBorderColor"
+              />
+            </div>
+            <div class="input-color">
+              <label for="snakeBoostColor">Snake Boost Color</label>
+              <input type="color" name="snakeBoostColor" id="snakeBoostColor" />
+            </div>
+            <div class="input-color">
+              <label for="boardColor">Board Color</label>
+              <input type="color" name="boardColor" id="boardColor" />
+            </div>
+            <div class="input-color">
+              <label for="boardBorderColor">Board Border Color</label>
+              <input
+                type="color"
+                name="boardBorderColor"
+                id="boardBorderColor"
+              />
+            </div>
+            <div class="input-color">
+              <label for="navColor">Navbar Color</label>
+              <input type="color" name="navColor" id="navColor" />
+            </div>
+            <div class="input-color">
+              <label for="keyColor">Keypad Color</label>
+              <input type="color" name="keyColor" id="keyColor" />
+            </div>
+          </div>
+          <button type="submit" class="btn">Save</button>
+        </form>
+      </div>
+    </div>
+    <div class="loader">
+      <div>Loading...</div>
+    </div>
+  </body>
 </html>
