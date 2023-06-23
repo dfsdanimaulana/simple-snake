@@ -403,6 +403,41 @@ nav span {
     color: #fff;
 }
 
+@keyframes dot {
+    0%,
+    20% {
+        content: '.';
+    }
+    40% {
+        content: '..';
+    }
+    60% {
+        content: '...';
+    }
+    80% {
+        content: '....';
+    }
+}
+
+.loading-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.loading-text {
+    position: relative;
+}
+
+.loading-text::after {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 100%;
+    animation: dot 1s infinite steps(1);
+}
+
 /* Desktop view */
 @media screen and (min-width: 600px) {
     body {
