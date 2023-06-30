@@ -6,7 +6,7 @@
     "homepage": "https://github.com/dfsdanimaulana/simple-snake",
     "scripts": {
         "dev": "webpack --mode development --watch",
-        "server": "npx live-server",
+        "server": "npx live-server --host=dnm.firebase.test.com",
         "start": "npm-run-all --parallel dev server",
         "build": "webpack --mode production",
         "build2": "node ./node_modules/webpack/bin/webpack.js"
