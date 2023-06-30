@@ -7,7 +7,9 @@ import {
     signInWithEmailAndPassword,
     updateProfile,
     onAuthStateChanged,
-    signOut
+    signOut,
+    signInWithPopup,
+    GoogleAuthProvider
 } from 'firebase/auth'
 
 import Swal from 'sweetalert2'
@@ -81,6 +83,7 @@ const keyColor = document.getElementById('keyColor')
 const navColor = document.getElementById('navColor')
 const navbar = document.querySelector('nav')
 const keys = document.querySelectorAll('.key')
+const signupGoogleButton = document.querySelectorAll('.google-signup')
 /**
  * Game logic
  */
@@ -220,8 +223,8 @@ function setColor() {
 const colRef = collection(db, 'scores')
 
 const q = query(colRef, orderBy('score', 'desc'))
-// realtime Listener firestore database
 
+// realtime Listener firestore database
 let tableText = ''
 onSnapshot(
     q,
@@ -348,6 +351,34 @@ onAuthStateChanged(
     }
 )
 
+function createUserData(user) {
+    addDoc(colRef, {
+        uid: user.uid,
+        username: user.displayName,
+        createdAt: serverTimestamp(),
+        score: 0,
+        foodShape: '50%',
+        foodColor: '#ff7c4f',
+        foodIcon: '',
+        snakeShape: '8px',
+        snakeHead: '#1a70ff',
+        snakeBody: '#00ccff',
+        snakeBorder: '#000',
+        snakeBoost: '#faf11b',
+        navColor: '#2d9de6',
+        boardColor: '#eaeaea',
+        sideColor: '#000',
+        keyColor: '#3b3b3b',
+        keyColorBackground: '#fff'
+    })
+        .then(() => {
+            goHome()
+        })
+        .catch((err) => {
+            console.log(err.message)
+        })
+}
+
 // handle signup user
 signupForm.addEventListener('submit', (e) => {
     e.preventDefault()
@@ -366,33 +397,7 @@ signupForm.addEventListener('submit', (e) => {
                 displayName
             }).then(() => {
                 signupForm.reset()
-
-                // create score data
-                addDoc(colRef, {
-                    uid: user.uid,
-                    username: user.displayName,
-                    createdAt: serverTimestamp(),
-                    score: 0,
-                    foodShape: '50%',
-                    foodColor: '#ff7c4f',
-                    foodIcon: '',
-                    snakeShape: '8px',
-                    snakeHead: '#1a70ff',
-                    snakeBody: '#00ccff',
-                    snakeBorder: '#000',
-                    snakeBoost: '#faf11b',
-                    navColor: '#2d9de6',
-                    boardColor: '#eaeaea',
-                    sideColor: '#000',
-                    keyColor: '#3b3b3b',
-                    keyColorBackground: '#fff'
-                })
-                    .then(() => {
-                        goHome()
-                    })
-                    .catch((err) => {
-                        console.log(err.message)
-                    })
+                createUserData(user)
             })
         })
         .catch((err) => {
@@ -402,6 +407,27 @@ signupForm.addEventListener('submit', (e) => {
             errorText.classList.add('error')
             signupForm.insertBefore(errorText, elementBefore)
         })
+})
+
+// handle signup user with gmail
+const signUpWithGoogle = async () => {
+    const provider = new GoogleAuthProvider()
+
+    try {
+        const cred = await signInWithPopup(auth, provider)
+        const user = cred.user
+
+        // User signed up successfully with Google
+        createUserData(user)
+    } catch (error) {
+        // Handle any errors that occurred during the sign-up process
+        console.log(error)
+    }
+}
+signupGoogleButton.forEach((e) => {
+    e.addEventListener('click', () => {
+        signUpWithGoogle()
+    })
 })
 
 // handle login user
