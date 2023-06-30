@@ -35,6 +35,7 @@ import { update as updateFood, draw as drawFood } from './game/food.js'
 
 import { outSideGrid } from './game/grid.js'
 import { getSnakeSpeed, boostSpeed } from './game/input.js'
+import { audioGameOver } from './game/audio.js'
 
 const gameBoard = document.getElementById('game-board')
 const gamePoint = document.getElementById('point-value')
@@ -89,10 +90,21 @@ let lastRenderTime = 0
 let gameOver = false
 let currentUser = null
 let userData = null
+let isBGMPlay = false
 
 // main Function
 function main(currentTime) {
+    // play bgm on first move
+    // if (!isBGMPlay) {
+    //     console.log('play bgm')
+    //     audioBGM1()
+    //     isBGMPlay = true
+    // }
+
     if (gameOver) {
+        // stop bgm audio here
+
+        audioGameOver()
         // ask user to login/signup if not yet
         if (currentUser && userData) {
             //update score in user firestore

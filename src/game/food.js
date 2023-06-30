@@ -1,21 +1,23 @@
 import { expandSnake, onSnake } from './snake.js'
 import { randomGridPosition } from './grid.js'
 import { config } from './config.js'
+import { audioEat1, audioMineCraftEat, audioPouEat } from './audio.js'
 
 let food = getRandomFoodPosition()
 
 let foodColor = '#e45b00'
 
 export function update() {
-  if(onSnake(food)){
-    expandSnake(config.EXPANSION_RATE)
-    food = getRandomFoodPosition()
-    foodColor = getRandomColor()
-  }
+    if (onSnake(food)) {
+        audioEat1()
+        expandSnake(config.EXPANSION_RATE)
+        food = getRandomFoodPosition()
+        foodColor = getRandomColor()
+    }
 }
 
-function getRandomColor () {
-  return `#${Math.floor(Math.random() * 16777215).toString(16)}`
+function getRandomColor() {
+    return `#${Math.floor(Math.random() * 16777215).toString(16)}`
 }
 
 export function draw(gameBoard) {
@@ -28,10 +30,10 @@ export function draw(gameBoard) {
 }
 
 function getRandomFoodPosition() {
-  let newFoodPosition
-  while( newFoodPosition == null || onSnake(newFoodPosition)){
-    newFoodPosition = randomGridPosition()
-  }
-  
-  return newFoodPosition
+    let newFoodPosition
+    while (newFoodPosition == null || onSnake(newFoodPosition)) {
+        newFoodPosition = randomGridPosition()
+    }
+
+    return newFoodPosition
 }
