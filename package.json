@@ -1,10 +1,13 @@
 {
     "name": "simple-snake",
     "version": "1.0.0",
-    "description": "",
+    "description": "Simple-Snake game created by @dnm17_",
     "main": "index.js",
+    "homepage": "https://github.com/dfsdanimaulana/simple-snake",
     "scripts": {
         "dev": "webpack --mode development --watch",
+        "server": "npx live-server",
+        "start": "npm-run-all --parallel dev server",
         "build": "webpack --mode production",
         "build2": "node ./node_modules/webpack/bin/webpack.js"
     },
