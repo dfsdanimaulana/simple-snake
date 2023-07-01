@@ -39,6 +39,9 @@ import { outSideGrid } from './game/grid.js'
 import { getSnakeSpeed, boostSpeed } from './game/input.js'
 import { audioGameOver } from './game/audio.js'
 
+// style
+import './styles/main.scss'
+
 const gameBoard = document.getElementById('game-board')
 const gamePoint = document.getElementById('point-value')
 const loginBox = document.getElementById('login')
