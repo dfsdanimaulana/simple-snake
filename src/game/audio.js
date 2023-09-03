@@ -33,3 +33,6 @@ export function audioBGM2() {
 export function audioEat1() {
     playSoundEffect('audio-eat-1')
 }
+export function audioBoost() {
+    playSoundEffect('audio-boost')
+}
